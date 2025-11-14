@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label"; // This component still uses the standard Label
 import {
@@ -19,10 +20,13 @@ import { GalleryVerticalEnd } from "lucide-react";
 
 export function RoleSelectionForm() {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleContinue = () => {
     if (selectedRole) {
       console.log("Selected role:", selectedRole);
+      // proceed to dashboard after role selection
+      router.push("/dashboard");
     } else {
       console.log("No role selected.");
     }
