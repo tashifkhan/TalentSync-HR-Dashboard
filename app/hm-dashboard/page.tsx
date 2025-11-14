@@ -1,4 +1,9 @@
 // app/executive-dashboard/page.tsx
+"use client"; // Add this at the top for recharts
+
+// --- Imports from your component structure ---
+import { AppSidebar } from "@/components/app-sidebar"; // <-- Updated
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 // --- Imports for ShadCN UI ---
 import {
@@ -22,143 +27,100 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+// Select imports are no longer needed for the header
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { Input } from "@/components/ui/input"; // <-- Added for new header
+
 import {
   LayoutDashboard,
   Briefcase,
   Users,
   BarChart2,
-  Settings,
+  Settings, // <-- Now used in header
   HelpCircle,
   LogOut,
-  ChevronDown,
-  Filter,
+  // ChevronDown, // No longer needed
+  // Filter, // No longer needed
+  Search, // <-- Added for new header
+  Bell, // <-- Added for new header
+  Menu, // <-- Added for new header
 } from "lucide-react";
+// --- Add Recharts Imports ---
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+} from "recharts";
 
-// --- 1. New Sidebar Component (ExecutiveSidebar) ---
-// This replaces AppSidebar for this specific page
-function ExecutiveSidebar() {
-  return (
-    <aside className="hidden w-64 flex-col border-r bg-background p-4 md:flex">
-      {/* Logo */}
-      <div className="flex h-20 items-center gap-3 px-2">
-        {/* Using a simple placeholder logo */}
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-          <BarChart2 className="h-5 w-5" />
-        </div>
-        <h1 className="text-xl font-bold">TalentSync</h1>
-      </div>
+// --- 1. Sidebar Component (REMOVED) ---
+// function ExecutiveSidebar() { ... } // <-- Replaced with AppSidebar import
 
-      {/* Navigation */}
-      <nav className="flex flex-col gap-2">
-        <Button
-          variant="ghost"
-          className="w-full justify-start gap-3 bg-primary/10 text-primary"
-        >
-          <LayoutDashboard className="h-4 w-4" />
-          Dashboard
-        </Button>
-        <Button variant="ghost" className="w-full justify-start gap-3">
-          <Briefcase className="h-4 w-4" />
-          Jobs
-        </Button>
-        <Button variant="ghost" className="w-full justify-start gap-3">
-          <Users className="h-4 w-4" />
-          Candidates
-        </Button>
-        <Button variant="ghost" className="w-full justify-start gap-3">
-          <BarChart2 className="h-4 w-4" />
-          Analytics
-        </Button>
-        <Button variant="ghost" className="w-full justify-start gap-3">
-          <Settings className="h-4 w-4" />
-          Settings
-        </Button>
-      </nav>
+// --- 2. Header Component (REPLACED) ---
+// function ExecutiveHeader() { ... } // <-- Replaced with DashboardHeader
 
-      {/* Footer Nav */}
-      <nav className="mt-auto flex flex-col gap-2">
-        <Button variant="ghost" className="w-full justify-start gap-3">
-          <HelpCircle className="h-4 w-4" />
-          Help Center
-        </Button>
-        <Button variant="ghost" className="w-full justify-start gap-3">
-          <LogOut className="h-4 w-4" />
-          Logout
-        </Button>
-        {/* Profile */}
-        <div className="mt-4 flex items-center gap-3 border-t pt-4">
-          <Avatar className="h-10 w-10">
-            <AvatarImage src="https://placehold.co/100x100/E2E8F0/4A5568?text=JL" alt="HR Manager" />
-            <AvatarFallback>HR</AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col">
-            <h2 className="text-sm font-semibold">Jessica Lane</h2>
-            <p className="text-xs text-muted-foreground">HR Manager</p>
-          </div>
-        </div>
-      </nav>
-    </aside>
-  );
-}
-
-// --- 2. New Header Component (ExecutiveHeader) ---
-function ExecutiveHeader() {
+// --- New Component: DashboardHeader (from app/page.tsx) ---
+function DashboardHeader() {
   return (
     <header className="sticky top-0 z-10 flex h-20 items-center justify-between border-b bg-background px-8">
-      {/* Title */}
-      <div>
-        <h1 className="text-2xl font-bold">Executive Dashboard</h1>
-        <p className="text-sm text-muted-foreground">
-          Strategic oversight and executive insights for HR/TA Leadership.
-        </p>
-      </div>
-      
-      {/* Filters */}
-      <div className="flex items-center gap-2">
-        <Select defaultValue="last-30">
-          <SelectTrigger className="w-[150px]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="last-30">Last 30 days</SelectItem>
-            <SelectItem value="last-60">Last 60 days</SelectItem>
-            <SelectItem value="last-90">Last 90 days</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Select defaultValue="last-quarter">
-          <SelectTrigger className="w-[150px]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="last-quarter">Last Quarter</SelectItem>
-            <SelectItem value="this-quarter">This Quarter</SelectItem>
-            <SelectItem value="prev-quarter">Previous Quarter</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Button variant="outline">Year-to-date</Button>
-
-        <Button>
-          <Filter className="mr-2 h-4 w-4" />
-          Customize
+      <div className="flex items-center gap-4">
+        {/* Mobile Sidebar Toggle (from your original structure) */}
+        <Button variant="outline" size="icon" className="md:hidden">
+          <Menu className="h-5 w-5" />
+          <span className="sr-only">Toggle Menu</span>
         </Button>
+        
+        {/* Welcome Message */}
+        <div className="flex min-w-72 flex-col">
+          <h1 className="text-2xl font-bold">Executive Dashboard</h1>
+          <p className="text-sm text-muted-foreground">
+            Strategic oversight and executive insights.
+          </p>
+        </div>
+      </div>
+
+      {/* Search & Actions (from our previous design) */}
+      <div className="flex flex-1 items-center justify-end gap-4">
+        <div className="relative w-full max-w-sm">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search for jobs, candidates..."
+            className="w-full pl-10"
+          />
+        </div>
+        <Button variant="outline" size="icon">
+          <Bell className="h-4 w-4" />
+        </Button>
+        <Button variant="outline" size="icon">
+          <Settings className="h-4 w-4" />
+        </Button>
+        <Avatar className="h-10 w-10">
+          <AvatarImage src="https://placehold.co/100x100/E2E8F0/4A5568?text=JL" alt="Jessica Lane" />
+          <AvatarFallback>JL</AvatarFallback>
+        </Avatar>
       </div>
     </header>
   );
 }
 
-// --- 3. Stat Card Components ---
+
+// --- 3. Stat Card Components (UNCHANGED) ---
 
 interface ExecutiveStatCardProps {
   title: string;
@@ -214,7 +176,18 @@ function ExecutiveStatCardsGrid() {
   );
 }
 
-// --- 4. Main Content Cards ---
+// --- 4. Main Content Cards (UNCHANGED) ---
+
+// --- Data for Trend Analysis Chart ---
+const trendData = [
+  { name: "Jan", "Time to Fill": 45, "Hiring Velocity": 20 },
+  { name: "Feb", "Time to Fill": 42, "Hiring Velocity": 25 },
+  { name: "Mar", "Time to Fill": 40, "Hiring Velocity": 28 },
+  { name: "Apr", "Time to Fill": 38, "Hiring Velocity": 30 },
+  { name: "May", "Time to Fill": 35, "Hiring Velocity": 35 },
+  { name: "Jun", "Time to Fill": 34, "Hiring Velocity": 40 },
+  { name: "Jul", "Time to Fill": 32, "Hiring Velocity": 42 },
+];
 
 function TrendAnalysisCard() {
   return (
@@ -227,8 +200,35 @@ function TrendAnalysisCard() {
       </CardHeader>
       <CardContent>
         {/* Placeholder for chart */}
-        <div className="flex h-[300px] items-center justify-center rounded-lg bg-secondary text-muted-foreground">
-                  </div>
+        <div className="h-[300px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              data={trendData}
+              margin={{ top: 5, right: 20, left: -10, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.5} />
+              <XAxis dataKey="name" fontSize={12} />
+              <YAxis yAxisId="left" fontSize={12} />
+              <YAxis yAxisId="right" orientation="right" fontSize={12} />
+              <Tooltip />
+              <Legend />
+              <Line
+                yAxisId="left"
+                type="monotone"
+                dataKey="Time to Fill"
+                stroke="#8884d8"
+                strokeWidth={2}
+              />
+              <Line
+                yAxisId="right"
+                type="monotone"
+                dataKey="Hiring Velocity"
+                stroke="#82ca9d"
+                strokeWidth={2}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       </CardContent>
     </Card>
   );
@@ -320,6 +320,13 @@ function TalentFunnelCard() {
   );
 }
 
+// --- Data for Budget Overview Chart ---
+const budgetData = [
+  { name: "Spent", value: 187500 },
+  { name: "Remaining", value: 250000 - 187500 },
+];
+const COLORS = ["#0088FE", "#E2E8F0"]; // Blue for Spent, Gray for Remaining
+
 function BudgetOverviewCard() {
   return (
     <Card>
@@ -329,8 +336,34 @@ function BudgetOverviewCard() {
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Placeholder for donut chart */}
-        <div className="flex h-[200px] items-center justify-center rounded-lg bg-secondary text-muted-foreground">
-                  </div>
+        <div className="h-[200px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={budgetData}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={80}
+                fill="#8884d8"
+                paddingAngle={5}
+                dataKey="value"
+              >
+                {budgetData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip
+                formatter={(value: number) =>
+                  `$${value.toLocaleString()}`
+                }
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
         <div className="flex justify-around">
           <div className="text-center">
             <p className="text-sm text-muted-foreground">Spent</p>
@@ -359,16 +392,16 @@ export default function Page() {
         } as React.CSSProperties
       }
     >
-      {/* Use the new ExecutiveSidebar */}
-      <ExecutiveSidebar />
+      {/* Use the new AppSidebar */}
+      <AppSidebar variant="inset" />
 
       <SidebarInset>
-        {/* Use the new ExecutiveHeader */}
-        <ExecutiveHeader /> 
+        {/* Use the new DashboardHeader */}
+        <DashboardHeader /> 
         
-        {/* Main Content */}
+        {/* Main Content (p-8 added back for padding) */}
         <main className="flex-1 space-y-8 p-8">
-          {/* Top Stat Cards */}
+          {/* Top Stat Cards (px-8 removed, padding is in main) */}
           <ExecutiveStatCardsGrid />
 
           {/* Main Dashboard Grid */}
