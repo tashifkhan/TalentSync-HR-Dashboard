@@ -1,26 +1,17 @@
 // components/candidates/candidates-view.tsx
+"use client"; // This is now a client component
+
+import { useState, useMemo } from "react"; // Import React hooks
 import { CandidatesHeader } from "@/components/candidates/candidates-header";
 import { FilterSidebar } from "@/components/candidates/filter-sidebar";
 import { CandidateList } from "@/components/candidates/candidate-list";
 import { ScoreWeighting } from "@/components/candidates/score-weighting";
 import { Candidate, FilterOption, ScoreWeight } from "@/types/candidates";
 
-// --- Mock Data ---
-// We keep the data here so the component is self-contained
-const statusOptions: FilterOption[] = [
-  { id: "status-screening", label: "Screening", checked: true },
-  { id: "status-interview", label: "Interview", checked: true },
-  { id: "status-offer", label: "Offer" },
-  { id: "status-hired", label: "Hired" },
-];
+// --- DUMMY DATA ---
+// We add more data to make the filtering meaningful
 
-const skillOptions: FilterOption[] = [
-  { id: "skill-roadmap", label: "Product Roadmapping" },
-  { id: "skill-agile", label: "Agile Methodologies" },
-  { id: "skill-figma", label: "Figma" },
-];
-
-const candidates: Candidate[] = [
+const allCandidates: Candidate[] = [
   {
     id: "c-1",
     name: "Eleanor Vance",
@@ -30,6 +21,9 @@ const candidates: Candidate[] = [
     avatarFallback: "EV",
     compositeScore: 92,
     scores: { skills: 95, experience: 90, cultureFit: 88 },
+    status: "Interview",
+    experienceYears: 8,
+    skills: ["Product Roadmapping", "Agile Methodologies"],
   },
   {
     id: "c-2",
@@ -40,6 +34,9 @@ const candidates: Candidate[] = [
     avatarFallback: "MC",
     compositeScore: 85,
     scores: { skills: 88, experience: 92, cultureFit: 75 },
+    status: "Screening",
+    experienceYears: 10,
+    skills: ["Agile Methodologies"],
   },
   {
     id: "c-3",
@@ -50,6 +47,35 @@ const candidates: Candidate[] = [
     avatarFallback: "AK",
     compositeScore: 71,
     scores: { skills: 75, experience: 68, cultureFit: 70 },
+    status: "Screening",
+    experienceYears: 4,
+    skills: ["Figma"],
+  },
+  {
+    id: "c-4",
+    name: "David Lee",
+    title: "Senior PM at FinTech Co",
+    avatarUrl:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuCyUjx0GRswAN3g39TeRv378BrSZrvXeBITvgHT07dJgwx9L0-eUvo7h_NBOKvZbPQXyq6MmFBrIWlA3P9P5yXC6XdTShUq1Ip4Wg2DncRVnVq3B3jjP0QnG1GVkuMqolXL8_OLLAoDRCgxRIo9zAU164wgeYPIiEmupcnbJhmfAIPRDygL5SjMt8jH4rcI4Lz5it5gvOV07GpK2f98mXnkXOdEvaXPqk7WrGIdlLpAb5gLOBlwGKHXdkoKK8zw0-P9yJqK9oar38OY3",
+    avatarFallback: "DL",
+    compositeScore: 95,
+    scores: { skills: 92, experience: 95, cultureFit: 94 },
+    status: "Interview",
+    experienceYears: 9,
+    skills: ["Product Roadmapping", "Agile Methodologies", "Figma"],
+  },
+  {
+    id: "c-5",
+    name: "Sophia Grant",
+    title: "Associate Product Manager",
+    avatarUrl:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuCyUjx0GRswAN3g39TeRv378BrSZrvXeBITvgHT07dJgwx9L0-eUvo7h_NBOKvZbPQXyq6MmFBrIWlA3P9P5yXC6XdTShUq1Ip4Wg2DncRVnVq3B3jjP0QnG1GVkuMqolXL8_OLLAoDRCgxRIo9zAU164wgeYPIiEmupcnbJhmfAIPRDygL5SjMt8jH4rcI4Lz5it5gvOV07GpK2f98mXnkXOdEvaXPqk7WrGIdlLpAb5gLOBlwGKHXdkoKK8zw0-P9yJqK9oar38OY4",
+    avatarFallback: "SG",
+    compositeScore: 78,
+    scores: { skills: 80, experience: 70, cultureFit: 85 },
+    status: "Offer",
+    experienceYears: 3,
+    skills: ["Agile Methodologies", "Figma"],
   },
 ];
 
@@ -60,22 +86,113 @@ const scoreWeights: ScoreWeight[] = [
   { id: "culture-fit", label: "Culture Fit", value: 10 },
 ];
 
-/**
- * Note: We've wrapped this in a `div` and removed the outer <main>
- * and max-w-screen-2xl to make it embeddable.
- */
+// --- INITIAL FILTER STATE ---
+const initialStatusOptions: FilterOption[] = [
+  { id: "status-screening", label: "Screening", checked: true },
+  { id: "status-interview", label: "Interview", checked: true },
+  { id: "status-offer", label: "Offer", checked: false },
+  { id: "status-hired", label: "Hired", checked: false },
+];
+
+const initialSkillOptions: FilterOption[] = [
+  { id: "skill-roadmap", label: "Product Roadmapping", checked: false },
+  { id: "skill-agile", label: "Agile Methodologies", checked: false },
+  { id: "skill-figma", label: "Figma", checked: false },
+];
+
+const initialExperienceValue = 3; // Default to 3+ years
+
+// --- COMPONENT ---
+
 export function CandidatesView() {
+  // --- STATE ---
+  const [statusFilters, setStatusFilters] =
+    useState<FilterOption[]>(initialStatusOptions);
+  const [skillFilters, setSkillFilters] =
+    useState<FilterOption[]>(initialSkillOptions);
+  const [experienceFilter, setExperienceFilter] = useState(
+    initialExperienceValue
+  );
+
+  // --- FILTER LOGIC ---
+  const filteredCandidates = useMemo(() => {
+    // Get active (checked) status filters
+    const activeStatuses = statusFilters
+      .filter((option) => option.checked)
+      .map((option) => option.label);
+
+    // Get active (checked) skill filters
+    const activeSkills = skillFilters
+      .filter((option) => option.checked)
+      .map((option) => option.label);
+
+    return allCandidates.filter((candidate) => {
+      // 1. Filter by Status
+      // If no statuses are selected, show all (or handle as needed)
+      // Here, we check if the candidate's status is in the active list.
+      if (
+        activeStatuses.length > 0 &&
+        !activeStatuses.includes(candidate.status)
+      ) {
+        return false;
+      }
+
+      // 2. Filter by Experience
+      if (candidate.experienceYears < experienceFilter) {
+        return false;
+      }
+
+      // 3. Filter by Skills
+      // If no skills are selected, show all candidates (ignore skill filter)
+      if (activeSkills.length === 0) {
+        return true;
+      }
+      // Check if the candidate has AT LEAST ONE of the selected skills
+      return activeSkills.some((skill) => candidate.skills.includes(skill));
+    });
+  }, [statusFilters, skillFilters, experienceFilter]);
+
+  // --- EVENT HANDLERS ---
+  const handleStatusChange = (id: string, checked: boolean) => {
+    setStatusFilters((prev) =>
+      prev.map((option) => (option.id === id ? { ...option, checked } : option))
+    );
+  };
+
+  const handleSkillChange = (id: string, checked: boolean) => {
+    setSkillFilters((prev) =>
+      prev.map((option) => (option.id === id ? { ...option, checked } : option))
+    );
+  };
+
+  const handleExperienceChange = (value: number) => {
+    setExperienceFilter(value);
+  };
+
+  const handleClearFilters = () => {
+    setStatusFilters(initialStatusOptions);
+    setSkillFilters(initialSkillOptions);
+    setExperienceFilter(initialExperienceValue);
+  };
+
   return (
     <div className="space-y-6">
       <CandidatesHeader />
 
-      {/* Three-column layout */}
       <div className="grid grid-cols-12 gap-8 items-start">
         <FilterSidebar
-          statusOptions={statusOptions}
-          skillOptions={skillOptions}
+          statusOptions={statusFilters}
+          skillOptions={skillFilters}
+          experienceValue={experienceFilter}
+          onStatusChange={handleStatusChange}
+          onSkillChange={handleSkillChange}
+          onExperienceChange={handleExperienceChange}
+          onClearFilters={handleClearFilters}
         />
-        <CandidateList candidates={candidates} />
+        <CandidateList
+          candidates={filteredCandidates}
+          totalCandidates={allCandidates.length}
+        />
         <ScoreWeighting weights={scoreWeights} />
       </div>
     </div>

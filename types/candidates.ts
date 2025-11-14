@@ -4,6 +4,8 @@ export type FilterOption = {
   id: string;
   label: string;
   checked?: boolean;
+  min?: number;
+  max?: number;
 };
 
 export type CandidateScore = {
@@ -20,6 +22,9 @@ export type Candidate = {
   avatarFallback: string;
   compositeScore: number;
   scores: CandidateScore;
+  status: string;
+  experienceYears: number;
+  skills: string[];
 };
 
 export type ScoreWeight = {
