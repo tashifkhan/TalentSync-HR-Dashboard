@@ -1,46 +1,53 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import { Label } from "@/components/ui/label"; // This component still uses the standard Label
 import {
   RadioGroup,
   RadioGroupItem,
 } from "@/components/ui/radio-group";
+import { cn } from "@/lib/utils";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+} from "@/components/ui/field";
+// Import icon from lucide-react
+import { GalleryVerticalEnd } from "lucide-react";
 
 export function RoleSelectionForm() {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
 
   const handleContinue = () => {
-    // Handle the logic for when the user clicks continue
-    // For example, save the role or navigate to the next page
     if (selectedRole) {
       console.log("Selected role:", selectedRole);
-      // alert(`You selected: ${selectedRole}`); // Avoid alert() in real apps
     } else {
       console.log("No role selected.");
-      // You might want to show a message
     }
   };
 
   return (
-    <Card className="mx-auto max-w-sm">
-      <CardHeader>
-        <CardTitle className="text-xl">Select Your Role</CardTitle>
-        <CardDescription>
-          Choose your primary role to continue.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {/* We use the onValueChange prop to update state */}
+    <div className="mx-auto flex w-full max-w-sm flex-col gap-6">
+      <FieldGroup>
+        <div className="flex flex-col items-center gap-2 text-center">
+          <Link
+            href="#"
+            className="flex flex-col items-center gap-2 font-medium"
+          >
+            <div className="flex size-8 items-center justify-center rounded-md">
+              <GalleryVerticalEnd className="size-6" />
+            </div>
+            <span className="sr-only">Acme Inc.</span>
+          </Link>
+          <h1 className="text-xl font-bold">Select Your Role</h1>
+          <FieldDescription>
+            Choose your primary role to continue.
+          </FieldDescription>
+        </div>
+
+        {/* RadioGroup fits nicely inside the FieldGroup */}
         <RadioGroup
           value={selectedRole || ""}
           onValueChange={setSelectedRole}
@@ -85,16 +92,28 @@ export function RoleSelectionForm() {
             </div>
           </Label>
         </RadioGroup>
-      </CardContent>
-      <CardFooter>
-        <Button
-          className="w-full"
-          onClick={handleContinue}
-          disabled={!selectedRole}
-        >
-          Continue
-        </Button>
-      </CardFooter>
-    </Card>
+
+        <Field>
+          <Button
+            className="w-full"
+            onClick={handleContinue}
+            disabled={!selectedRole}
+          >
+            Continue
+          </Button>
+        </Field>
+      </FieldGroup>
+      <FieldDescription className="px-6 text-center">
+        By clicking continue, you agree to our{" "}
+        <a href="/terms" className="underline">
+          Terms of Service
+        </a>{" "}
+        and{" "}
+        <a href="/privacy" className="underline">
+          Privacy Policy
+        </a>
+        .
+      </FieldDescription>
+    </div>
   );
 }
