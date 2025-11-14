@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -14,9 +15,13 @@ import {
 import { GalleryVerticalEnd } from "lucide-react";
 
 export function ForgotPasswordForm() {
+  const router = useRouter();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Password reset link requested.");
+    // navigate to OTP verification step after requesting reset link
+    router.push("/otp");
   };
 
   return (

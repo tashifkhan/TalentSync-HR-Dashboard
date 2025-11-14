@@ -1,4 +1,7 @@
+"use client"
+
 import { GalleryVerticalEnd } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -16,9 +19,17 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const router = useRouter();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // TODO: perform authentication; on success navigate to OTP verification
+    router.push("/otp");
+  };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <form>
+      <form onSubmit={handleSubmit}>
         <FieldGroup>
           <div className="flex flex-col items-center gap-2 text-center">
             <Link
@@ -32,7 +43,7 @@ export function LoginForm({
             </Link>
             <h1 className="text-xl font-bold">Welcome to Acme Inc.</h1>
             <FieldDescription>
-              Don&apos;t have an account? <a href="#">Sign up</a>
+              Don&apos;t have an account? <Link href="/signup">Sign up</Link>
             </FieldDescription>
           </div>
           <Field>

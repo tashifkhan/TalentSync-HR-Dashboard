@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -15,9 +16,17 @@ import {
 import { GalleryVerticalEnd, Github } from "lucide-react";
 
 export function SignupForm() {
+  const router = useRouter();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // After successful signup, navigate to role selection
+    router.push("/role-selection");
+  };
+
   return (
     <div className="mx-auto flex w-full max-w-sm flex-col gap-6">
-      <form>
+      <form onSubmit={handleSubmit}>
         <FieldGroup>
           <div className="flex flex-col items-center gap-2 text-center">
             <Link
