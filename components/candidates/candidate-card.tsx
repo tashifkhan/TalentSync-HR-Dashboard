@@ -1,19 +1,19 @@
-// components/candidates/candidate-card.tsx
+import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { Candidate } from "@/types/candidates";
-import { Mail, Eye } from "lucide-react";
+import { Mail, ArrowRight } from "lucide-react"; // <-- Replaced Eye with ArrowRight
+import { cn } from "@/lib/utils";
 
 type CandidateCardProps = {
   candidate: Candidate;
 };
 
-// Helper to determine progress bar class
 const getProgressClass = (score: number) => {
   if (score >= 90) return "bg-gradient-to-r from-orange-400 to-emerald-500";
-  if (score >= 80) return "bg-gradient-to-r from-orange-400 to-emerald-500"; // Same as HTML
+  if (score >= 80) return "bg-gradient-to-r from-orange-400 to-emerald-500";
   return "bg-gradient-to-r from-red-500 to-orange-400";
 };
 
@@ -72,13 +72,18 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
         </div>
       </div>
       <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300"
+        {/* --- MODIFICATION HERE --- */}
+        <Link
+          href={`/jobs/candidate/${candidate.id}`}
+          className={cn(
+            buttonVariants({ variant: "ghost", size: "icon" }),
+            "h-8 w-8 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300"
+          )}
         >
-          <Eye className="h-4 w-4" />
-        </Button>
+          <ArrowRight className="h-4 w-4" /> {/* <-- Icon changed */}
+        </Link>
+        {/* --- END MODIFICATION --- */}
+
         <Button
           variant="ghost"
           size="icon"
