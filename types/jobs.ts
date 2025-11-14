@@ -28,9 +28,14 @@ export type TopCandidate = {
   aiMatch: number;
   stage: string;
   lastActivity: string;
+  email: string;
+  phone: string;
+  appliedDate: string;
 };
 
 export type AiInsight = {
   id: string;
   text: string;
 };
+// types/jobs.ts
+// ... (other types)

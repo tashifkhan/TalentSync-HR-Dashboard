@@ -1,20 +1,27 @@
 // app/jobs/page.tsx
-// import { Sidebar } from "@/components/jobs/sidebar";
 import { Sidebar } from "@/components/jobs/sidebar";
 import { RequisitionHeader } from "@/components/jobs/requisition-header";
 import { RequisitionStats } from "@/components/jobs/requisition-stats";
 import { PipelineBoard } from "@/components/jobs/pipeline-board";
 import { TopCandidatesTable } from "@/components/jobs/top-candidates-table";
-import { AiInsights } from "@/components/jobs/ai-insights";
+// import { AiInsights } from "@/components/jobs/ai-insights"; // <-- REMOVED
+import { CandidatesView } from "@/components/candidates/candidates-view";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  AiInsight,
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"; // <-- IMPORTED
+import {
+  // AiInsight, // <-- No longer needed
   PipelineColumnData,
   StatCardData,
   TopCandidate,
-} from "@/types/jobs"; // <-- Updated path
+} from "@/types/jobs";
+import { ChevronDown } from "lucide-react"; // <-- IMPORTED
 
 // --- Mock Data ---
-// This data would normally come from an API
 
 const requisitionData = {
   title: "Senior Product Designer",
@@ -97,9 +104,10 @@ const pipelineColumns: PipelineColumnData[] = [
   },
   { id: "col-5", title: "Offer", candidates: [] },
   { id: "col-6", title: "Hired", candidates: [] },
-  { id: "col-7", title: "Rejected", candidates: [] }, // In a real app, you'd fetch the 4 rejected candidates
+  { id: "col-7", title: "Rejected", candidates: [] },
 ];
 
+// --- UPDATED MOCK DATA ---
 const topCandidates: TopCandidate[] = [
   {
     id: "c-1",
@@ -110,6 +118,9 @@ const topCandidates: TopCandidate[] = [
     aiMatch: 98,
     stage: "Interview",
     lastActivity: "2 days ago",
+    email: "ava.garcia@example.com",
+    phone: "+1 (555) 123-4567",
+    appliedDate: "Oct 28, 2025",
   },
   {
     id: "c-2",
@@ -120,6 +131,9 @@ const topCandidates: TopCandidate[] = [
     aiMatch: 95,
     stage: "Screening",
     lastActivity: "4 days ago",
+    email: "liam.johnson@example.com",
+    phone: "+1 (555) 234-5678",
+    appliedDate: "Oct 26, 2025",
   },
   {
     id: "c-3",
@@ -130,19 +144,13 @@ const topCandidates: TopCandidate[] = [
     aiMatch: 92,
     stage: "Sourced",
     lastActivity: "1 day ago",
+    email: "olivia.martinez@example.com",
+    phone: "+1 (555) 345-6789",
+    appliedDate: "Oct 29, 2025",
   },
 ];
 
-const aiInsights: AiInsight[] = [
-  {
-    id: "ai-1",
-    text: "Potential bottleneck at Screening stage. Average time is 7 days, 40% above target.",
-  },
-  {
-    id: "ai-2",
-    text: "Top 3 candidates are awaiting feedback. Consider scheduling next steps.",
-  },
-];
+// const aiInsights: AiInsight[] = [ ... ]; // <-- REMOVED
 
 // --- Page Component ---
 
@@ -163,13 +171,40 @@ export default function RequisitionOverviewPage() {
 
           <RequisitionStats stats={statsData} />
 
-          <PipelineBoard columns={pipelineColumns} />
+          <Tabs defaultValue="pipeline" className="w-full">
+            <TabsList className="mb-4">
+              <TabsTrigger value="pipeline">Pipeline</TabsTrigger>
+              <TabsTrigger value="candidates">Candidates View</TabsTrigger>
+            </TabsList>
 
-          {/* KPI Section */}
-          <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <TopCandidatesTable candidates={topCandidates} />
-            <AiInsights insights={aiInsights} />
-          </section>
+            <TabsContent value="pipeline" className="space-y-6">
+              {/* --- NEW COLLAPSIBLE PIPELINE --- */}
+              <Accordion type="single" collapsible defaultValue="item-1">
+                <AccordionItem value="item-1" className="border-b-0">
+                  <AccordionTrigger className="text-2xl font-bold text-gray-900 dark:text-white mb-4 px-1 py-2 group hover:no-underline">
+                    <div className="flex items-center gap-2">
+                      Pipeline
+                      <ChevronDown className="h-5 w-5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <PipelineBoard columns={pipelineColumns} />
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+
+              {/* --- UPDATED KPI SECTION --- */}
+              <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Updated to span full width */}
+                <TopCandidatesTable candidates={topCandidates} />
+                {/* <AiInsights insights={aiInsights} /> <-- REMOVED */}
+              </section>
+            </TabsContent>
+
+            <TabsContent value="candidates">
+              <CandidatesView />
+            </TabsContent>
+          </Tabs>
         </div>
       </main>
     </div>
