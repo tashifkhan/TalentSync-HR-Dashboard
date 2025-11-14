@@ -2,54 +2,81 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+// Import icon from lucide-react
+import { GalleryVerticalEnd } from "lucide-react";
 
 export function ForgotPasswordForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle the form submission logic here
-    // For example, send a password reset email
     console.log("Password reset link requested.");
   };
 
   return (
-    <Card className="mx-auto max-w-sm">
-      <CardHeader>
-        <CardTitle className="text-xl">Forgot Your Password?</CardTitle>
-        <CardDescription>
-          Enter your email address below to receive a password reset link.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
+    <div className="mx-auto flex w-full max-w-sm flex-col gap-6">
+      <form onSubmit={handleSubmit}>
+        <FieldGroup>
+          <div className="flex flex-col items-center gap-2 text-center">
+            <Link
+              href="#"
+              className="flex flex-col items-center gap-2 font-medium"
+            >
+              <div className="flex size-8 items-center justify-center rounded-md">
+                <GalleryVerticalEnd className="size-6" />
+              </div>
+              <span className="sr-only">Acme Inc.</span>
+            </Link>
+            <h1 className="text-xl font-bold">Forgot Your Password?</h1>
+            <FieldDescription>
+              Enter your email address below to receive a password reset link.
+            </FieldDescription>
+          </div>
+
+          <Field>
+            <FieldLabel htmlFor="email">Email</FieldLabel>
             <Input
               id="email"
               type="email"
               placeholder="m@example.com"
               required
             />
-          </div>
-          <Button type="submit" className="w-full">
-            Send Reset Link
-          </Button>
-        </form>
-        <div className="mt-4 text-center text-sm">
+          </Field>
+          <Field>
+            <Button
+              type="submit"
+              className="w-full"
+            >
+              Send Reset Link
+            </Button>
+          </Field>
+        </FieldGroup>
+      </form>
+      <div className="flex flex-col gap-4">
+        <FieldDescription className="text-center">
           Remembered your password?{" "}
           <Link href="/login" className="underline">
             Log in
           </Link>
-        </div>
-      </CardContent>
-    </Card>
+        </FieldDescription>
+        <FieldDescription className="px-6 text-center">
+          By clicking continue, you agree to our{" "}
+          <a href="/terms" className="underline">
+            Terms of Service
+          </a>{" "}
+          and{" "}
+          <a href="/privacy" className="underline">
+            Privacy Policy
+          </a>
+          .
+        </FieldDescription>
+      </div>
+    </div>
   );
 }
