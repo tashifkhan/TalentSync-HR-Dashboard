@@ -1,34 +1,31 @@
-"use client"
+"use client";
 
-import { GalleryVerticalEnd } from "lucide-react"
-import { useRouter } from "next/navigation"
-
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import Link from "next/link"
+} from "@/components/ui/field";
+// Import icons from lucide-react
+import { GalleryVerticalEnd, Github } from "lucide-react";
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export function SignupForm() {
   const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: perform authentication; on success navigate to OTP verification
-    router.push("/otp");
+    // After successful signup, navigate to role selection
+    router.push("/role-selection");
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className="mx-auto flex w-full max-w-sm flex-col gap-6">
       <form onSubmit={handleSubmit}>
         <FieldGroup>
           <div className="flex flex-col items-center gap-2 text-center">
@@ -41,11 +38,22 @@ export function LoginForm({
               </div>
               <span className="sr-only">Acme Inc.</span>
             </Link>
-            <h1 className="text-xl font-bold">Welcome to Acme Inc.</h1>
+            <h1 className="text-xl font-bold">Create an account</h1>
             <FieldDescription>
-              Don&apos;t have an account? <Link href="/signup">Sign up</Link>
+              Enter your information below to get started
             </FieldDescription>
           </div>
+
+          <Field className="grid grid-cols-2 gap-4">
+            <Field>
+              <FieldLabel htmlFor="first-name">First name</FieldLabel>
+              <Input id="first-name" placeholder="Max" required />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="last-name">Last name</FieldLabel>
+              <Input id="last-name" placeholder="Robinson" required />
+            </Field>
+          </Field>
           <Field>
             <FieldLabel htmlFor="email">Email</FieldLabel>
             <Input
@@ -56,7 +64,16 @@ export function LoginForm({
             />
           </Field>
           <Field>
-            <Button type="submit">Login</Button>
+            <FieldLabel htmlFor="password">Password</FieldLabel>
+            <Input id="password" type="password" />
+          </Field>
+          <Field>
+            <Button
+              type="submit"
+              className="w-full"
+            >
+              Create an account
+            </Button>
           </Field>
           <FieldSeparator>Or</FieldSeparator>
           <Field className="grid gap-4 sm:grid-cols-2">
@@ -75,13 +92,28 @@ export function LoginForm({
               </svg>
               Continue with Google
             </Button>
-          </Field>
+            </Field>
         </FieldGroup>
       </form>
-      <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
-      </FieldDescription>
+      <div className="flex flex-col gap-4">
+        <FieldDescription className="text-center">
+          Already have an account?{" "}
+          <Link href="/login" className="underline">
+            Log in
+          </Link>
+        </FieldDescription>
+        <FieldDescription className="px-6 text-center">
+          By clicking continue, you agree to our{" "}
+          <a href="/terms" className="underline">
+            Terms of Service
+          </a>{" "}
+          and{" "}
+          <a href="/privacy" className="underline">
+            Privacy Policy
+          </a>
+          .
+        </FieldDescription>
+      </div>
     </div>
-  )
+  );
 }

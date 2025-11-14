@@ -1,4 +1,7 @@
+"use client"
+
 import { GalleryVerticalEnd } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -16,9 +19,17 @@ import {
 } from "@/components/ui/input-otp"
 
 export function OTPForm({ className, ...props }: React.ComponentProps<"div">) {
+  const router = useRouter();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // After verifying OTP navigate to dashboard
+    router.push("/dashboard");
+  };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <form>
+      <form onSubmit={handleSubmit}>
         <FieldGroup>
           <div className="flex flex-col items-center gap-2 text-center">
             <a
