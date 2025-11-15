@@ -1,5 +1,3 @@
-// app/candidates/[id]/page.tsx
-// import { AppSidebar } from "@/components/layout/app-sidebar";
 import { ProfileHeader } from "@/components/profile/profile-header";
 import { SummaryCard } from "@/components/profile/summary-card";
 import { MainContentTabs } from "@/components/profile/main-content-tabs";
