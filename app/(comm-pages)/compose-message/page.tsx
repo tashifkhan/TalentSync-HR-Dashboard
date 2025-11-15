@@ -1,6 +1,14 @@
 "use client"
 
 import { useState } from "react"
+
+// --- Imports for Dashboard Layout ---
+import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Menu, Bell, Search } from "lucide-react"; // <-- Imports for new header
+// --- End Dashboard Imports ---
+
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -9,13 +17,16 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
-  LayoutGrid,
-  Briefcase,
-  Users,
-  Calendar,
-  BarChart3,
+  // --- Old Sidebar Icons (Removed) ---
+  // LayoutGrid,
+  // Briefcase,
+  // Users,
+  // Calendar,
+  // BarChart3,
+  // HelpCircle,
+  
+  // --- Icons used in Page Content (Kept) ---
   Settings,
-  HelpCircle,
   Sparkles,
   Send,
   ChevronRight,
@@ -26,74 +37,83 @@ import {
   X,
 } from "lucide-react"
 
-const sidebarItems = [
-  { icon: LayoutGrid, label: "Dashboard", href: "/dashboard" },
-  { icon: Briefcase, label: "Jobs", href: "/jobs" },
-  { icon: Users, label: "Candidates", href: "/candidates", active: true },
-  { icon: Calendar, label: "Calendar", href: "/calendar" },
-  { icon: BarChart3, label: "Reports", href: "/reports" },
-]
+// const sidebarItems = [ ... ] // <-- REMOVED
+
+// --- NEW Component: ComposeMessageHeader (from dashboard) ---
+function ComposeMessageHeader() {
+  return (
+    <header className="sticky top-0 z-10 flex h-20 items-center justify-between border-b bg-background px-8 shrink-0">
+      <div className="flex items-center gap-4">
+        {/* Mobile Sidebar Toggle */}
+        <Button variant="outline" size="icon" className="md:hidden">
+          <Menu className="h-5 w-5" />
+          <span className="sr-only">Toggle Menu</span>
+        </Button>
+        
+        {/* Welcome Message (Adapted for Candidates) */}
+        <div className="flex min-w-72 flex-col">
+          <h1 className="text-3xl font-bold">Candidates</h1>
+          <p className="text-sm text-muted-foreground">
+            View and manage candidate profiles and logs.
+          </p>
+        </div>
+      </div>
+
+      {/* Search & Actions */}
+      <div className="flex flex-1 items-center justify-end gap-4">
+        <div className="relative w-full max-w-sm">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search candidates..."
+            className="w-full pl-10"
+          />
+        </div>
+        <Button variant="outline" size="icon">
+          <Bell className="h-4 w-4" />
+        </Button>
+        <Button variant="outline" size="icon">
+          <Settings className="h-4 w-4" />
+        </Button>
+        <Avatar className="h-10 w-10">
+          <AvatarImage src="https://placehold.co/100x100/E2E8F0/4A5568?text=JL" alt="Jessica Lane" />
+          <AvatarFallback>JL</AvatarFallback>
+        </Avatar>
+      </div>
+    </header>
+  );
+}
+
 
 export default function ComposeMessagePage() {
   const [messageMode, setMessageMode] = useState<"email" | "sms">("email")
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col">
-      <div className="flex h-full min-h-screen">
-        {/* Side Navigation Bar */}
-        <aside className="flex w-64 flex-col border-r bg-card p-4">
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-3">
-              <div className="bg-primary/10 rounded-full size-10 flex items-center justify-center">
-                <span className="text-primary font-bold text-sm">TS</span>
-              </div>
-              <div className="flex flex-col">
-                <h1 className="text-base font-bold">TalentSync HR</h1>
-                <p className="text-muted-foreground text-sm">Recruitment Platform</p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2 mt-4">
-              {sidebarItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                    item.active
-                      ? "bg-primary/20 text-primary font-bold"
-                      : "hover:bg-accent"
-                  }`}
-                >
-                  <item.icon className="size-5" />
-                  <p className="text-sm font-medium">{item.label}</p>
-                </a>
-              ))}
-            </div>
-          </div>
-          <div className="mt-auto flex flex-col gap-4">
-            <Button className="w-full">New Job</Button>
-            <div className="flex flex-col gap-1">
-              <a
-                href="/settings"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-accent transition-colors"
-              >
-                <Settings className="size-5" />
-                <p className="text-sm font-medium">Settings</p>
-              </a>
-              <a
-                href="/help"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-accent transition-colors"
-              >
-                <HelpCircle className="size-5" />
-                <p className="text-sm font-medium">Help</p>
-              </a>
-            </div>
-          </div>
-        </aside>
+    // --- UPDATED: New Dashboard Layout ---
+    <SidebarProvider
+      style={
+        {
+          "--sidebar-width": "calc(var(--spacing) * 72)",
+          "--header-height": "calc(var(--spacing) * 12)",
+        } as React.CSSProperties
+      }
+    >
+      {/* --- ADDED: New AppSidebar --- */}
+      <AppSidebar variant="inset" />
+      
+      {/* --- REMOVED: Old Sidebar Navigation --- */}
+      {/* <aside> ... </aside> */}
 
-        {/* Main Content */}
+      {/* --- ADDED: New SidebarInset Wrapper --- */}
+      <SidebarInset>
+
+        {/* --- ADDED: New Global Sticky Header --- */}
+        <ComposeMessageHeader />
+
+        {/* --- UPDATED: Main content now fills remaining space and scrolls --- */}
         <main className="flex-1 overflow-y-auto">
           <div className="p-8">
-            {/* Breadcrumbs */}
+            {/* Breadcrumbs (Styling is theme-aware) */}
             <div className="flex flex-wrap gap-2 items-center text-sm mb-4">
               <a href="/candidates" className="text-muted-foreground hover:text-primary">
                 Candidates
@@ -106,10 +126,10 @@ export default function ComposeMessagePage() {
               <span className="font-medium">New Message</span>
             </div>
 
-            {/* Page Heading */}
+            {/* Page Heading (Styling is theme-aware) */}
             <h1 className="text-3xl font-bold tracking-tight mb-6">New Message to Jane Doe</h1>
 
-            {/* Main Interface */}
+            {/* Main Interface (Styling is theme-aware) */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Left Column: Composition Area */}
               <div className="lg:col-span-2">
@@ -218,14 +238,15 @@ export default function ComposeMessagePage() {
                       </p>
                     </div>
                   </div>
+                  {/* --- UPDATED: Replaced hardcoded colors with theme variables --- */}
                   <div className="flex flex-wrap gap-2 mb-3">
-                    <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                    <Badge variant="secondary" className="bg-primary/10 text-primary border-0">
                       Top Candidate
                     </Badge>
-                    <Badge variant="secondary" className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                    <Badge variant="secondary">
                       Java Expert
                     </Badge>
-                    <Badge variant="secondary" className="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                    <Badge variant="secondary">
                       React
                     </Badge>
                   </div>
@@ -245,22 +266,24 @@ export default function ComposeMessagePage() {
                 <Card className="p-4">
                   <h3 className="font-bold mb-4">Communication History</h3>
                   <div className="flex flex-col gap-4">
-                    <div className="border-l-2 border-blue-500 pl-3">
+                    {/* --- UPDATED: Replaced hardcoded colors with theme variables --- */}
+                    <div className="border-l-2 border-primary pl-3">
                       <p className="text-xs text-muted-foreground mb-1">Mar 28, 2024</p>
                       <p className="text-sm font-semibold">Phone Screen Follow-up</p>
                       <p className="text-xs text-muted-foreground mt-1">
                         Hi Jane, it was great speaking with you today. I was very...
                       </p>
                     </div>
-                    <div className="border-l-2 border-gray-300 dark:border-gray-700 pl-3">
+                    <div className="border-l-2 border-border pl-3">
                       <p className="text-xs text-muted-foreground mb-1">Mar 25, 2024</p>
                       <p className="text-sm font-semibold">Re: Your Application for Senior Engineer</p>
                       <p className="text-xs text-muted-foreground mt-1">
                         Hi Jane, thanks for your interest. We'd love to schedule a brief c...
                       </p>
                     </div>
-                    <div className="border-l-2 border-gray-300 dark:border-gray-700 pl-3">
+                    <div className="border-l-2 border-border pl-3">
                       <p className="text-xs text-muted-foreground mb-1">Mar 22, 2024</p>
+      
                       <p className="text-sm font-semibold">Application Received</p>
                       <p className="text-xs text-muted-foreground mt-1">
                         This is an automated confirmation that we have received your...
@@ -272,7 +295,8 @@ export default function ComposeMessagePage() {
             </div>
           </div>
         </main>
-      </div>
-    </div>
+
+      </SidebarInset>
+    </SidebarProvider>
   )
 }
