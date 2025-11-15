@@ -1,94 +1,66 @@
 "use client"
 
-import {
-  IconDots,
-  IconFolder,
-  IconShare3,
-  IconTrash,
-  type Icon,
-} from "@tabler/icons-react"
+import * as React from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation" // <-- Added for active state
+import { type Icon } from "@tabler/icons-react"
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar"
-import Link from "next/link"
+import { cn } from "@/lib/utils"
 
-export function NavDocuments({ items, params }: {
+export function NavDocuments({ items, params, className }: {
   items: {
     name: string
     url: string
     icon: Icon
   }[]
   params: string
+  className?: string
 }) {
   if (!params) {
     params = "Documents";
   }
-  const { isMobile } = useSidebar()
+  const pathname = usePathname() // <-- Get the current page path
 
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>{params}</SidebarGroupLabel>
+    <SidebarGroup className={cn("group-data-[collapsible=icon]:mt-6", className)}>
+      {/* Label now correctly hides when sidebar is collapsed */}
+      <SidebarGroupLabel className="group-data-[collapsible=icon]:hidden">
+        {params}
+      </SidebarGroupLabel>
       <SidebarMenu>
-        {items.map((item) => (
-          <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
-              <Link href={item.url}>
-                <item.icon />
-                <span>{item.name}</span>
-              </Link>
-            </SidebarMenuButton>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuAction
-                  showOnHover
-                  className="data-[state=open]:bg-accent rounded-sm"
-                >
-                  <IconDots />
-                  <span className="sr-only">More</span>
-                </SidebarMenuAction>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-24 rounded-lg"
-                side={isMobile ? "bottom" : "right"}
-                align={isMobile ? "end" : "start"}
+        {items.map((item) => {
+          // Check if this link is the active page
+          const isActive = pathname === item.url
+          
+          return (
+            <SidebarMenuItem key={item.name}>
+              <SidebarMenuButton
+                asChild
+                // Apply 'primary' variant if active, 'ghost' if not
+                variant={isActive ? "outline" : "default"}
               >
-                <DropdownMenuItem>
-                  <IconFolder />
-                  <span>Open</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <IconShare3 />
-                  <span>Share</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive">
-                  <IconTrash />
-                  <span>Delete</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        ))}
-        <SidebarMenuItem>
-          <SidebarMenuButton className="text-sidebar-foreground/70">
-            <IconDots className="text-sidebar-foreground/70" />
-            <span>More</span>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
+                <Link href={item.url}>
+                  <item.icon />
+                  {/* Text now correctly hides when sidebar is collapsed */}
+                  <span className="group-data-[collapsible=icon]:hidden">
+                    {item.name}
+                  </span>
+                </Link>
+              </SidebarMenuButton>
+              {/* Removed the DropdownMenu with "Share/Delete" 
+                as it is not needed for page navigation links
+              */}
+            </SidebarMenuItem>
+          )
+        })}
+        {/* Removed the static "More" button */}
       </SidebarMenu>
     </SidebarGroup>
   )
