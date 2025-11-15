@@ -36,53 +36,9 @@ import {
   FileText,
   X,
 } from "lucide-react"
+import { SiteHeader } from "@/components/site-header";
 
 // const sidebarItems = [ ... ] // <-- REMOVED
-
-// --- NEW Component: ComposeMessageHeader (from dashboard) ---
-function ComposeMessageHeader() {
-  return (
-    <header className="sticky top-0 z-10 flex h-20 items-center justify-between border-b bg-background px-8 shrink-0">
-      <div className="flex items-center gap-4">
-        {/* Mobile Sidebar Toggle */}
-        <Button variant="outline" size="icon" className="md:hidden">
-          <Menu className="h-5 w-5" />
-          <span className="sr-only">Toggle Menu</span>
-        </Button>
-        
-        {/* Welcome Message (Adapted for Candidates) */}
-        <div className="flex min-w-72 flex-col">
-          <h1 className="text-3xl font-bold">Candidates</h1>
-          <p className="text-sm text-muted-foreground">
-            View and manage candidate profiles and logs.
-          </p>
-        </div>
-      </div>
-
-      {/* Search & Actions */}
-      <div className="flex flex-1 items-center justify-end gap-4">
-        <div className="relative w-full max-w-sm">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search candidates..."
-            className="w-full pl-10"
-          />
-        </div>
-        <Button variant="outline" size="icon">
-          <Bell className="h-4 w-4" />
-        </Button>
-        <Button variant="outline" size="icon">
-          <Settings className="h-4 w-4" />
-        </Button>
-        <Avatar className="h-10 w-10">
-          <AvatarImage src="https://placehold.co/100x100/E2E8F0/4A5568?text=JL" alt="Jessica Lane" />
-          <AvatarFallback>JL</AvatarFallback>
-        </Avatar>
-      </div>
-    </header>
-  );
-}
 
 
 export default function ComposeMessagePage() {
@@ -108,7 +64,7 @@ export default function ComposeMessagePage() {
       <SidebarInset>
 
         {/* --- ADDED: New Global Sticky Header --- */}
-        <ComposeMessageHeader />
+        <SiteHeader header="Message Composer" />
 
         {/* --- UPDATED: Main content now fills remaining space and scrolls --- */}
         <main className="flex-1 overflow-y-auto">
