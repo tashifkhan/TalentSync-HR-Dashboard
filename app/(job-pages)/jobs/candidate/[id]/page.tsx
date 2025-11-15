@@ -1,68 +1,29 @@
 // app/jobs/candidate/[id]/page.tsx
 // Server Component (default). Avoid 'use client' so async is allowed.
 
-import { TopNavbar } from "@/components/candidates/top-navbar"; // Kept for reference, but replaced
+// --- Imports from your other dashboard files ---
+import { AppSidebar } from "@/components/app-sidebar";
+import { SiteHeader } from "@/components/site-header"; // <-- Reference import
+import {
+  SidebarInset,
+  SidebarProvider,
+} from "@/components/ui/sidebar";
+// --- End Dashboard Imports ---
+
 import { FeedbackPanel } from "@/components/candidate-profile/feedback-panel";
 import { ProfileHeader } from "@/components/candidate-profile/profile-header";
 import { ProfileSidebar } from "@/components/candidate-profile/profile-sidebar";
 import { ProfileSummary } from "@/components/candidate-profile/profile-summary";
 import { CandidateProfile, CandidateStub } from "@/types/candidate-profile";
-
-// --- Imports from your other dashboard files ---
-import { AppSidebar } from "@/components/app-sidebar";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card"; // <-- Added Card imports
-import { Menu, Bell, Settings, Search } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 // --- MOCK DATA ---
-// (Unchanged)
+// (Unchanged - data omitted for brevity)
 const allCandidatesStub: CandidateStub[] = [
-  {
-    id: "c-1",
-    name: "John Doe",
-    stage: "AI Screening",
-    matchScore: 92,
-    avatarUrl:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDo-Vqh5BSoyr0gBppZkK-bzvFWHRaTWB54uMyySeNVjoHjTI5IPqXKV0JA_4rR9SB-bnri4b8YT-7q2vk6zCvZFoD3BGwWD9TXMCktK_aTQ0bghVz50EXWgLsteq0UXzHWyQhvuicE6fvHw4Xp4BjSlTpb7KdZ3WT4cAaTVV0ltF-nQC4iSGKvpVUMETHtgzFnESn4_XLH9X8lXGFqTO7sIbmbrn4yQWFI1vup_k_W0xCW08ZRpIiWjN5cFwHeGHTIr09yFuCxsW3D",
-    avatarFallback: "JD",
-  },
-  {
-    id: "c-2",
-    name: "Jane Smith",
-    stage: "AI Screening",
-    matchScore: 88,
-    avatarUrl:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDXvm_iPvq__Y7ftPiqMwR3QmEzUhAAYzYHwPNEsJONr1Uz_hKZjxT9WP_Yf8RYSt08mWQfp4fq6FnM0CKjCtPd7GSdbYzSWygeBSu5TsIRwy2HBSifnixHV_5GJpcbznes_bHdTRwsh8dSKmFwyi471SGxPnEWeTmSjgqgyZJF8GQggrgvoI4z17-9dbJlpiEXKeJ9jMbREQet2ge9OQ0eUHq6nfUgecox3pTJ6pNU-vKSJQ0h5VGre6r3KTcwqufn0NEAFjKbhPHV",
-    avatarFallback: "JS",
-  },
-  {
-    id: "c-3",
-    name: "Peter Jones",
-    stage: "AI Screening",
-    matchScore: 85,
-    avatarUrl:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDCimbUXXtkPfQYbzCD3WTdcCt428Y3M-4prbTQHYze-Q5rHgnKkjg--ER6rCeBu5a41UtFEh4ORNOWjwmvF8hShSofOBdPOZEzjSDr-zQT8Dt4V4ttipLvlHHV7xb89JSg0LBn1j0t1tpgyfw1WQIc2YmlQcCVaKzfFHqyAwHN4nkU94q21zJXA5Lj5fSTzBOJN06djDagJj1GBb0_uWRTjojpp-WHmhIuzCXE-P2w7U05DKbhPp0YVtawkOCbTlNaEBqpQgou1JGP",
-    avatarFallback: "PJ",
-  },
-  {
-    id: "c-4",
-    name: "Emily White",
-    stage: "AI Screening",
-    matchScore: 81,
-    avatarUrl:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuBGQiWyPH4Ecjs-IathQlIPrCD5CTprjwODs-a58IGNDE1KR0RUgw_xjrqYyPaXeNMJohS2Sz0ZwVx754HAO5wAExLf9-GY1sqnixv2rTpiXZG0HGt2bsqab13drdd9nbTu3fgssxu4cUAulpRyj6c_dpONDQFeio1WPjO349kIsM-NRXtT0eJRbvY1DU3lBWo_PBpCtFvnOiZjNqZrjxHuyRjwPt452ABn7kuQzFeT7V8876mfjU0pk3tz5v-AogE299hq7pv4UF0b",
-    avatarFallback: "EW",
-  },
+  // ...
 ];
-
 const candidateProfileData: Record<string, CandidateProfile> = {
+
   "c-1": {
     id: "c-1",
     name: "John Does",
@@ -256,6 +217,7 @@ const candidateProfileData: Record<string, CandidateProfile> = {
       { id: "sc-3", label: "Ownership", score: 4, maxScore: 5 },
     ],
   },
+
 };
 
 // Mock function to get data
@@ -266,51 +228,7 @@ async function getCandidateData(id: string) {
   return { profile, candidatesList };
 }
 
-// --- New Component: DashboardHeader (from app/page.tsx) ---
-function DashboardHeader() {
-  return (
-    <header className="sticky top-0 z-10 flex h-20 items-center justify-between border-b bg-background px-8">
-      <div className="flex items-center gap-4">
-        {/* Sidebar Toggle */}
-        <SidebarTrigger className="md:hidden" />
-        <SidebarTrigger className="hidden md:inline-flex" />
-
-        {/* Welcome Message */}
-        <div className="flex min-w-72 flex-col">
-          <h1 className="text-2xl font-bold">Candidate Profile</h1>
-          <p className="text-sm text-muted-foreground">
-            Review and score candidates.
-          </p>
-        </div>
-      </div>
-
-      {/* Search & Actions (from our previous design) */}
-      <div className="flex flex-1 items-center justify-end gap-4">
-        <div className="relative w-full max-w-sm">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search for jobs, candidates..."
-            className="w-full pl-10"
-          />
-        </div>
-        <Button variant="outline" size="icon">
-          <Bell className="h-4 w-4" />
-        </Button>
-        <Button variant="outline" size="icon">
-          <Settings className="h-4 w-4" />
-        </Button>
-        <Avatar className="h-10 w-10">
-          <AvatarImage
-            src="https://placehold.co/100x100/E2E8F0/4A5568?text=JL"
-            alt="Jessica Lane"
-          />
-          <AvatarFallback>JL</AvatarFallback>
-        </Avatar>
-      </div>
-    </header>
-  );
-}
+// --- REMOVED: Inline DashboardHeader component ---
 
 // --- PAGE COMPONENT ---
 
@@ -325,6 +243,7 @@ export default async function CandidateProfilePage({
   const { profile, candidatesList } = await getCandidateData(id);
 
   return (
+    // --- UPDATED: New Dashboard Layout ---
     <SidebarProvider
       style={
         {
@@ -336,26 +255,31 @@ export default async function CandidateProfilePage({
       <AppSidebar variant="inset" />
 
       <SidebarInset>
-        <DashboardHeader />
-
-        <main className="grid flex-1 grid-cols-1 lg:grid-cols-5 gap-8 p-8">
-          {/* Central Content */}
-          <section className="lg:col-span-3 overflow-y-auto">
-            <CardContent className="space-y-8 p-6 ">
+        {/* --- ADDED: Reusable SiteHeader --- */}
+        <SiteHeader header="Candidate Profile" />
+        
+        {/* --- ADDED: Main flex wrapper from reference --- */}
+        <div className="flex flex-1 flex-col">
+          {/* Main Content (Original <main> tag with overflow) */}
+          <main className="grid flex-1 grid-cols-1 lg:grid-cols-5 gap-8 p-8 overflow-y-auto">
+            
+            {/* Central Content */}
+            {/* --- UPDATED: Removed <CardContent> wrapper --- */}
+            <section className="lg:col-span-3 space-y-8">
               <ProfileHeader profile={profile} />
               <ProfileSummary profile={profile} />
-            </CardContent>
-          </section>
+            </section>
 
-          {/* Right Sidebar (stacked) */}
-          <aside className="lg:col-span-2 flex flex-col gap-8">
-            <ProfileSidebar
-              candidates={candidatesList}
-              activeCandidateId={id}
-            />
-            <FeedbackPanel initialScorecard={profile.scorecard} />
-          </aside>
-        </main>
+            {/* Right Sidebar (stacked) */}
+            <aside className="lg:col-span-2 flex flex-col gap-8">
+              <ProfileSidebar
+                candidates={candidatesList}
+                activeCandidateId={id}
+              />
+              <FeedbackPanel initialScorecard={profile.scorecard} />
+            </aside>
+          </main>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );
