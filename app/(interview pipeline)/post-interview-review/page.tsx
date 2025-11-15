@@ -1,80 +1,97 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { ArrowLeft, Download, Share2, ThumbsUp, ThumbsDown, Search } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
+import { useState } from "react";
+import {
+  ArrowLeft,
+  Download,
+  Share2,
+  ThumbsUp,
+  ThumbsDown,
+  Search,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 
 const transcriptData = [
   {
     id: 1,
-    speaker: 'Interviewer',
-    time: '00:24',
-    message: 'Thanks for joining, Jane. Can you start by telling us about your experience managing product roadmaps for B2B SaaS products?',
-    type: 'interviewer',
+    speaker: "Interviewer",
+    time: "00:24",
+    message:
+      "Thanks for joining, Jane. Can you start by telling us about your experience managing product roadmaps for B2B SaaS products?",
+    type: "interviewer",
   },
   {
     id: 2,
-    speaker: 'Jane Doe',
-    time: '00:58',
-    message: 'Certainly. At my previous role at InnovateCorp, I was responsible for the entire product lifecycle of our flagship CRM platform. I increased user engagement by 30% in my first year by prioritizing user-requested features and data-driven insights.',
-    type: 'candidate',
+    speaker: "Jane Doe",
+    time: "00:58",
+    message:
+      "Certainly. At my previous role at InnovateCorp, I was responsible for the entire product lifecycle of our flagship CRM platform. I increased user engagement by 30% in my first year by prioritizing user-requested features and data-driven insights.",
+    type: "candidate",
   },
   {
     id: 3,
-    speaker: 'Interviewer',
-    time: '01:45',
-    message: 'That\'s impressive. How do you approach balancing technical debt with new feature development?',
-    type: 'interviewer',
+    speaker: "Interviewer",
+    time: "01:45",
+    message:
+      "That's impressive. How do you approach balancing technical debt with new feature development?",
+    type: "interviewer",
   },
   {
     id: 4,
-    speaker: 'Jane Doe',
-    time: '02:12',
-    message: 'I advocate for allocating a fixed percentage of each sprint—typically around 20%—to address technical debt. This ensures platform stability while still delivering value to customers. I also worked on a project that migrated our entire stack from monolith to microservices...',
-    type: 'candidate',
+    speaker: "Jane Doe",
+    time: "02:12",
+    message:
+      "I advocate for allocating a fixed percentage of each sprint—typically around 20%—to address technical debt. This ensures platform stability while still delivering value to customers. I also worked on a project that migrated our entire stack from monolith to microservices...",
+    type: "candidate",
   },
 ];
 
 const keyTakeaways = [
-  'Strong product sense and leadership qualities',
-  'Excellent experience in B2B SaaS aligns well with the role\'s requirements',
-  'Limited knowledge in backend architecture may require further evaluation',
+  "Strong product sense and leadership qualities",
+  "Excellent experience in B2B SaaS aligns well with the role's requirements",
+  "Limited knowledge in backend architecture may require further evaluation",
 ];
 
 const skillsAssessment = [
-  { skill: 'Product Strategy', score: 4, max: 5 },
-  { skill: 'Leadership', score: 5, max: 5 },
-  { skill: 'Technical Knowledge', score: 3, max: 5 },
-  { skill: 'Communication', score: 5, max: 5 },
-  { skill: 'Problem Solving', score: 4, max: 5 },
+  { skill: "Product Strategy", score: 4, max: 5 },
+  { skill: "Leadership", score: 5, max: 5 },
+  { skill: "Technical Knowledge", score: 3, max: 5 },
+  { skill: "Communication", score: 5, max: 5 },
+  { skill: "Problem Solving", score: 4, max: 5 },
 ];
 
 const factCheckData = [
   {
-    claim: 'Increased user engagement by 30% at InnovateCorp',
-    status: 'verified',
-    source: 'LinkedIn profile, InnovateCorp press release',
+    claim: "Increased user engagement by 30% at InnovateCorp",
+    status: "verified",
+    source: "LinkedIn profile, InnovateCorp press release",
   },
   {
-    claim: 'Led migration from monolith to microservices',
-    status: 'pending',
-    source: 'Awaiting verification from references',
+    claim: "Led migration from monolith to microservices",
+    status: "pending",
+    source: "Awaiting verification from references",
   },
   {
-    claim: '5 years of product management experience',
-    status: 'verified',
-    source: 'Resume, LinkedIn profile',
+    claim: "5 years of product management experience",
+    status: "verified",
+    source: "Resume, LinkedIn profile",
   },
 ];
 
 export default function PostInterviewReview() {
-  const [activeTab, setActiveTab] = useState('transcript');
+  const [activeTab, setActiveTab] = useState("transcript");
 
   return (
     <div className="min-h-screen bg-background">
@@ -120,7 +137,9 @@ export default function PostInterviewReview() {
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold">Jane Doe</h3>
-                    <p className="text-sm text-muted-foreground">Senior Product Manager</p>
+                    <p className="text-sm text-muted-foreground">
+                      Senior Product Manager
+                    </p>
                   </div>
                 </div>
 
@@ -158,11 +177,15 @@ export default function PostInterviewReview() {
             {/* AI Summary */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">AI-Powered Actionable Summary</CardTitle>
+                <CardTitle className="text-lg">
+                  AI-Powered Actionable Summary
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <h4 className="text-sm font-semibold text-primary mb-2">Key Takeaways</h4>
+                  <h4 className="text-sm font-semibold text-primary mb-2">
+                    Key Takeaways
+                  </h4>
                   <ul className="space-y-2">
                     {keyTakeaways.map((takeaway, idx) => (
                       <li key={idx} className="text-sm flex gap-2">
@@ -176,12 +199,16 @@ export default function PostInterviewReview() {
                 <Separator />
 
                 <div>
-                  <h4 className="text-sm font-semibold mb-3">Skills Assessment</h4>
+                  <h4 className="text-sm font-semibold mb-3">
+                    Skills Assessment
+                  </h4>
                   <div className="space-y-3">
                     {skillsAssessment.map((item) => (
                       <div key={item.skill}>
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs font-medium">{item.skill}</span>
+                          <span className="text-xs font-medium">
+                            {item.skill}
+                          </span>
                           <span className="text-xs text-muted-foreground">
                             {item.score}/{item.max}
                           </span>
@@ -189,7 +216,9 @@ export default function PostInterviewReview() {
                         <div className="h-2 bg-muted rounded-full overflow-hidden">
                           <div
                             className="h-full bg-primary rounded-full transition-all"
-                            style={{ width: `${(item.score / item.max) * 100}%` }}
+                            style={{
+                              width: `${(item.score / item.max) * 100}%`,
+                            }}
                           />
                         </div>
                       </div>
@@ -202,7 +231,9 @@ export default function PostInterviewReview() {
             {/* Overall Score */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Overall Suitability Score</CardTitle>
+                <CardTitle className="text-lg">
+                  Overall Suitability Score
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-center space-y-3">
@@ -234,9 +265,12 @@ export default function PostInterviewReview() {
                       <span className="text-4xl font-bold">85%</span>
                     </div>
                   </div>
-                  <Badge className="bg-green-500 hover:bg-green-600">Strong Match</Badge>
+                  <Badge className="bg-green-500 hover:bg-green-600">
+                    Strong Match
+                  </Badge>
                   <p className="text-xs text-muted-foreground">
-                    Jane demonstrates excellent product management skills and leadership qualities.
+                    Jane demonstrates excellent product management skills and
+                    leadership qualities.
                   </p>
                 </div>
               </CardContent>
@@ -261,141 +295,196 @@ export default function PostInterviewReview() {
           <div className="lg:col-span-2">
             <Card className="h-full">
               <CardHeader>
-                <Tabs value={activeTab} onValueChange={setActiveTab}>
+                <Tabs
+                  value={activeTab}
+                  onValueChange={setActiveTab}
+                  className="w-full"
+                >
                   <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="transcript">Full Transcript</TabsTrigger>
+                    <TabsTrigger value="transcript">
+                      Full Transcript
+                    </TabsTrigger>
                     <TabsTrigger value="factcheck">Fact-Check</TabsTrigger>
-                    <TabsTrigger value="feedback">Structured Feedback</TabsTrigger>
+                    <TabsTrigger value="feedback">
+                      Structured Feedback
+                    </TabsTrigger>
                   </TabsList>
-                </Tabs>
-              </CardHeader>
 
-              <CardContent>
-                <TabsContent value="transcript" className="mt-0">
-                  <div className="mb-4">
-                    <div className="relative">
-                      <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                      <Input
-                        placeholder="Search in transcript..."
-                        className="pl-9"
-                      />
+                  <TabsContent value="transcript" className="mt-4">
+                    <div className="mb-4">
+                      <div className="relative">
+                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                        <Input
+                          placeholder="Search in transcript..."
+                          className="pl-9"
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <ScrollArea className="h-[600px] pr-4">
-                    <div className="space-y-6">
-                      {transcriptData.map((item) => (
-                        <div key={item.id} className="flex gap-3">
-                          <div
-                            className={`w-10 h-10 rounded-full shrink-0 flex items-center justify-center text-white text-sm font-semibold ${
-                              item.type === 'interviewer'
-                                ? 'bg-slate-500'
-                                : 'bg-teal-500'
-                            }`}
-                          >
-                            {item.type === 'interviewer' ? 'INT' : 'JD'}
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-baseline gap-2 mb-1">
-                              <p className="font-semibold text-sm">{item.speaker}</p>
-                              <p className="text-xs text-muted-foreground">{item.time}</p>
+                    <ScrollArea className="h-[600px] pr-4">
+                      <div className="space-y-6">
+                        {transcriptData.map((item) => (
+                          <div key={item.id} className="flex gap-3">
+                            <div
+                              className={`w-10 h-10 rounded-full shrink-0 flex items-center justify-center text-white text-sm font-semibold ${
+                                item.type === "interviewer"
+                                  ? "bg-slate-500"
+                                  : "bg-teal-500"
+                              }`}
+                            >
+                              {item.type === "interviewer" ? "INT" : "JD"}
                             </div>
-                            <p className="text-sm leading-relaxed">{item.message}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </ScrollArea>
-                </TabsContent>
-
-                <TabsContent value="factcheck" className="mt-0">
-                  <ScrollArea className="h-[600px] pr-4">
-                    <div className="space-y-4">
-                      {factCheckData.map((fact, idx) => (
-                        <Card key={idx}>
-                          <CardContent className="pt-6">
-                            <div className="space-y-3">
-                              <div className="flex items-start justify-between gap-4">
-                                <p className="text-sm font-medium flex-1">{fact.claim}</p>
-                                <Badge
-                                  variant={fact.status === 'verified' ? 'default' : 'secondary'}
-                                  className={
-                                    fact.status === 'verified'
-                                      ? 'bg-green-500 hover:bg-green-600'
-                                      : 'bg-yellow-500 hover:bg-yellow-600'
-                                  }
-                                >
-                                  {fact.status === 'verified' ? '✓ Verified' : '⏳ Pending'}
-                                </Badge>
+                            <div className="flex-1">
+                              <div className="flex items-baseline gap-2 mb-1">
+                                <p className="font-semibold text-sm">
+                                  {item.speaker}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  {item.time}
+                                </p>
                               </div>
-                              <p className="text-xs text-muted-foreground">
-                                <span className="font-semibold">Source:</span> {fact.source}
+                              <p className="text-sm leading-relaxed">
+                                {item.message}
                               </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </TabsContent>
+
+                  <TabsContent value="factcheck" className="mt-4">
+                    <ScrollArea className="h-[600px] pr-4">
+                      <div className="space-y-4">
+                        {factCheckData.map((fact, idx) => (
+                          <Card key={idx}>
+                            <CardContent className="pt-6">
+                              <div className="space-y-3">
+                                <div className="flex items-start justify-between gap-4">
+                                  <p className="text-sm font-medium flex-1">
+                                    {fact.claim}
+                                  </p>
+                                  <Badge
+                                    variant={
+                                      fact.status === "verified"
+                                        ? "default"
+                                        : "secondary"
+                                    }
+                                    className={
+                                      fact.status === "verified"
+                                        ? "bg-green-500 hover:bg-green-600"
+                                        : "bg-yellow-500 hover:bg-yellow-600"
+                                    }
+                                  >
+                                    {fact.status === "verified"
+                                      ? "✓ Verified"
+                                      : "⏳ Pending"}
+                                  </Badge>
+                                </div>
+                                <p className="text-xs text-muted-foreground">
+                                  <span className="font-semibold">Source:</span>{" "}
+                                  {fact.source}
+                                </p>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </TabsContent>
+
+                  <TabsContent value="feedback" className="mt-4">
+                    <ScrollArea className="h-[600px] pr-4">
+                      <div className="space-y-6">
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="text-base">
+                              Technical Competency
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent className="space-y-3">
+                            <div>
+                              <p className="text-sm font-medium mb-2">
+                                Strengths:
+                              </p>
+                              <ul className="space-y-1 text-sm text-muted-foreground">
+                                <li>
+                                  • Deep understanding of product lifecycle
+                                  management
+                                </li>
+                                <li>
+                                  • Experience with data-driven decision making
+                                </li>
+                                <li>
+                                  • Strong grasp of user engagement metrics
+                                </li>
+                              </ul>
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium mb-2">
+                                Areas for Improvement:
+                              </p>
+                              <ul className="space-y-1 text-sm text-muted-foreground">
+                                <li>
+                                  • Limited backend architecture knowledge
+                                </li>
+                                <li>
+                                  • Could benefit from more technical depth in
+                                  system design
+                                </li>
+                              </ul>
                             </div>
                           </CardContent>
                         </Card>
-                      ))}
-                    </div>
-                  </ScrollArea>
-                </TabsContent>
 
-                <TabsContent value="feedback" className="mt-0">
-                  <ScrollArea className="h-[600px] pr-4">
-                    <div className="space-y-6">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-base">Technical Competency</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-3">
-                          <div>
-                            <p className="text-sm font-medium mb-2">Strengths:</p>
-                            <ul className="space-y-1 text-sm text-muted-foreground">
-                              <li>• Deep understanding of product lifecycle management</li>
-                              <li>• Experience with data-driven decision making</li>
-                              <li>• Strong grasp of user engagement metrics</li>
-                            </ul>
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium mb-2">Areas for Improvement:</p>
-                            <ul className="space-y-1 text-sm text-muted-foreground">
-                              <li>• Limited backend architecture knowledge</li>
-                              <li>• Could benefit from more technical depth in system design</li>
-                            </ul>
-                          </div>
-                        </CardContent>
-                      </Card>
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="text-base">
+                              Leadership & Communication
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent className="space-y-3">
+                            <div>
+                              <p className="text-sm font-medium mb-2">
+                                Strengths:
+                              </p>
+                              <ul className="space-y-1 text-sm text-muted-foreground">
+                                <li>
+                                  • Excellent communication and presentation
+                                  skills
+                                </li>
+                                <li>
+                                  • Demonstrated experience leading
+                                  cross-functional teams
+                                </li>
+                                <li>
+                                  • Strong stakeholder management capabilities
+                                </li>
+                              </ul>
+                            </div>
+                          </CardContent>
+                        </Card>
 
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-base">Leadership & Communication</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-3">
-                          <div>
-                            <p className="text-sm font-medium mb-2">Strengths:</p>
-                            <ul className="space-y-1 text-sm text-muted-foreground">
-                              <li>• Excellent communication and presentation skills</li>
-                              <li>• Demonstrated experience leading cross-functional teams</li>
-                              <li>• Strong stakeholder management capabilities</li>
-                            </ul>
-                          </div>
-                        </CardContent>
-                      </Card>
-
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-base">Cultural Fit</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <p className="text-sm text-muted-foreground">
-                            Jane's collaborative approach and focus on user-centric product development
-                            aligns well with our company values. Her experience in fast-paced
-                            environments suggests she would thrive in our startup culture.
-                          </p>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </ScrollArea>
-                </TabsContent>
-              </CardContent>
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="text-base">
+                              Cultural Fit
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <p className="text-sm text-muted-foreground">
+                              Jane's collaborative approach and focus on
+                              user-centric product development aligns well with
+                              our company values. Her experience in fast-paced
+                              environments suggests she would thrive in our
+                              startup culture.
+                            </p>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </ScrollArea>
+                  </TabsContent>
+                </Tabs>
+              </CardHeader>
             </Card>
           </div>
         </div>
