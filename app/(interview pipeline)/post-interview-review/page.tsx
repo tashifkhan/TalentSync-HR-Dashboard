@@ -1,6 +1,13 @@
 "use client";
 
 import { useState } from "react";
+
+// --- Imports for Dashboard Layout ---
+import { SiteHeader } from "@/components/site-header"; // <-- Reference import
+import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+// --- End Dashboard Imports ---
+
 import {
   ArrowLeft,
   Download,
@@ -94,401 +101,427 @@ export default function PostInterviewReview() {
   const [activeTab, setActiveTab] = useState("transcript");
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b bg-card sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon">
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
-              <div>
-                <h1 className="text-2xl font-bold">Jane Doe</h1>
-                <p className="text-sm text-muted-foreground">
-                  Applied for Senior Product Manager
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm">
-                <Download className="h-4 w-4 mr-2" />
-                Export
-              </Button>
-              <Button variant="outline" size="sm">
-                <Share2 className="h-4 w-4 mr-2" />
-                Share
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
+    // --- UPDATED: New Dashboard Layout ---
+    <SidebarProvider
+      style={
+        {
+          "--sidebar-width": "calc(var(--spacing) * 72)",
+          "--header-height": "calc(var(--spacing) * 12)",
+        } as React.CSSProperties
+      }
+    >
+      {/* --- ADDED: New AppSidebar --- */}
+      <AppSidebar variant="inset" />
+      
+      {/* --- ADDED: New SidebarInset Wrapper --- */}
+      <SidebarInset>
+        
+        {/* --- ADDED: Reusable SiteHeader --- */}
+        <SiteHeader header="Post-Interview Review" />
 
-      <main className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Candidate Info & Summary */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Candidate Profile */}
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex flex-col items-center text-center space-y-4">
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center text-white text-3xl font-semibold">
-                    JD
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold">Jane Doe</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Senior Product Manager
-                    </p>
-                  </div>
-                </div>
-
-                <Separator className="my-6" />
-
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-xs font-semibold text-muted-foreground uppercase mb-1">
-                      Interview Date
-                    </p>
-                    <p className="text-sm">June 26, 2024</p>
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-muted-foreground uppercase mb-1">
-                      Interview Stage
-                    </p>
-                    <Badge variant="secondary">Technical Round</Badge>
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-muted-foreground uppercase mb-1">
-                      Duration
-                    </p>
-                    <p className="text-sm">45 minutes</p>
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-muted-foreground uppercase mb-1">
-                      Interviewer
-                    </p>
-                    <p className="text-sm">Sarah Johnson, Michael Chen</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* AI Summary */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">
-                  AI-Powered Actionable Summary
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+        {/* --- UPDATED: Main content now fills remaining space and scrolls --- */}
+        <main className="flex-1 overflow-y-auto p-8">
+          {/* --- REMOVED: Old sticky header --- */}
+          
+          <div className="container mx-auto px-4 py-8">
+            {/* Page Header (moved from sticky header) */}
+            <div className="flex items-center justify-between gap-4 mb-8">
+              <div className="flex items-center gap-4">
+                <Button variant="ghost" size="icon">
+                  <ArrowLeft className="h-4 w-4" />
+                </Button>
                 <div>
-                  <h4 className="text-sm font-semibold text-primary mb-2">
-                    Key Takeaways
-                  </h4>
-                  <ul className="space-y-2">
-                    {keyTakeaways.map((takeaway, idx) => (
-                      <li key={idx} className="text-sm flex gap-2">
-                        <span className="text-primary mt-1">•</span>
-                        <span>{takeaway}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <Separator />
-
-                <div>
-                  <h4 className="text-sm font-semibold mb-3">
-                    Skills Assessment
-                  </h4>
-                  <div className="space-y-3">
-                    {skillsAssessment.map((item) => (
-                      <div key={item.skill}>
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs font-medium">
-                            {item.skill}
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            {item.score}/{item.max}
-                          </span>
-                        </div>
-                        <div className="h-2 bg-muted rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-primary rounded-full transition-all"
-                            style={{
-                              width: `${(item.score / item.max) * 100}%`,
-                            }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Overall Score */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">
-                  Overall Suitability Score
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center space-y-3">
-                  <div className="relative inline-flex items-center justify-center">
-                    <svg className="w-32 h-32 transform -rotate-90">
-                      <circle
-                        cx="64"
-                        cy="64"
-                        r="56"
-                        stroke="currentColor"
-                        strokeWidth="8"
-                        fill="none"
-                        className="text-muted"
-                      />
-                      <circle
-                        cx="64"
-                        cy="64"
-                        r="56"
-                        stroke="currentColor"
-                        strokeWidth="8"
-                        fill="none"
-                        strokeDasharray={`${2 * Math.PI * 56}`}
-                        strokeDashoffset={`${2 * Math.PI * 56 * (1 - 0.85)}`}
-                        className="text-primary"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-4xl font-bold">85%</span>
-                    </div>
-                  </div>
-                  <Badge className="bg-green-500 hover:bg-green-600">
-                    Strong Match
-                  </Badge>
-                  <p className="text-xs text-muted-foreground">
-                    Jane demonstrates excellent product management skills and
-                    leadership qualities.
+                  <h1 className="text-2xl font-bold">Jane Doe</h1>
+                  <p className="text-sm text-muted-foreground">
+                    Applied for Senior Product Manager
                   </p>
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Decision Actions */}
-            <Card>
-              <CardContent className="pt-6 space-y-3">
-                <Button className="w-full bg-green-600 hover:bg-green-700">
-                  <ThumbsUp className="h-4 w-4 mr-2" />
-                  Move to Next Stage
+              </div>
+              <div className="flex items-center gap-2">
+                <Button variant="outline" size="sm">
+                  <Download className="h-4 w-4 mr-2" />
+                  Export
                 </Button>
-                <Button variant="destructive" className="w-full">
-                  <ThumbsDown className="h-4 w-4 mr-2" />
-                  Reject Candidate
+                <Button variant="outline" size="sm">
+                  <Share2 className="h-4 w-4 mr-2" />
+                  Share
                 </Button>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Right Column - Transcript & Details */}
-          <div className="lg:col-span-2">
-            <Card className="h-full">
-              <CardHeader>
-                <Tabs
-                  value={activeTab}
-                  onValueChange={setActiveTab}
-                  className="w-full"
-                >
-                  <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="transcript">
-                      Full Transcript
-                    </TabsTrigger>
-                    <TabsTrigger value="factcheck">Fact-Check</TabsTrigger>
-                    <TabsTrigger value="feedback">
-                      Structured Feedback
-                    </TabsTrigger>
-                  </TabsList>
-
-                  <TabsContent value="transcript" className="mt-4">
-                    <div className="mb-4">
-                      <div className="relative">
-                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                        <Input
-                          placeholder="Search in transcript..."
-                          className="pl-9"
-                        />
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Left Column - Candidate Info & Summary */}
+              <div className="lg:col-span-1 space-y-6">
+                {/* Candidate Profile */}
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="flex flex-col items-center text-center space-y-4">
+                      {/* --- UPDATED: Replaced teal gradient with theme primary --- */}
+                      <div className="w-24 h-24 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-3xl font-semibold">
+                        JD
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-semibold">Jane Doe</h3>
+                        <p className="text-sm text-muted-foreground">
+                          Senior Product Manager
+                        </p>
                       </div>
                     </div>
-                    <ScrollArea className="h-[600px] pr-4">
-                      <div className="space-y-6">
-                        {transcriptData.map((item) => (
-                          <div key={item.id} className="flex gap-3">
-                            <div
-                              className={`w-10 h-10 rounded-full shrink-0 flex items-center justify-center text-white text-sm font-semibold ${
-                                item.type === "interviewer"
-                                  ? "bg-slate-500"
-                                  : "bg-teal-500"
-                              }`}
-                            >
-                              {item.type === "interviewer" ? "INT" : "JD"}
+
+                    <Separator className="my-6" />
+
+                    <div className="space-y-4">
+                      <div>
+                        <p className="text-xs font-semibold text-muted-foreground uppercase mb-1">
+                          Interview Date
+                        </p>
+                        <p className="text-sm">June 26, 2024</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold text-muted-foreground uppercase mb-1">
+                          Interview Stage
+                        </p>
+                        <Badge variant="secondary">Technical Round</Badge>
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold text-muted-foreground uppercase mb-1">
+                          Duration
+                        </p>
+                        <p className="text-sm">45 minutes</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold text-muted-foreground uppercase mb-1">
+                          Interviewer
+                        </p>
+                        <p className="text-sm">Sarah Johnson, Michael Chen</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* AI Summary */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">
+                      AI-Powered Actionable Summary
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      {/* 'text-primary' is a valid theme variable */}
+                      <h4 className="text-sm font-semibold text-primary mb-2">
+                        Key Takeaways
+                      </h4>
+                      <ul className="space-y-2">
+                        {keyTakeaways.map((takeaway, idx) => (
+                          <li key={idx} className="text-sm flex gap-2">
+                            <span className="text-primary mt-1">•</span>
+                            <span>{takeaway}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <Separator />
+
+                    <div>
+                      <h4 className="text-sm font-semibold mb-3">
+                        Skills Assessment
+                      </h4>
+                      <div className="space-y-3">
+                        {skillsAssessment.map((item) => (
+                          <div key={item.skill}>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-xs font-medium">
+                                {item.skill}
+                              </span>
+                              <span className="text-xs text-muted-foreground">
+                                {item.score}/{item.max}
+                              </span>
                             </div>
-                            <div className="flex-1">
-                              <div className="flex items-baseline gap-2 mb-1">
-                                <p className="font-semibold text-sm">
-                                  {item.speaker}
-                                </p>
-                                <p className="text-xs text-muted-foreground">
-                                  {item.time}
-                                </p>
-                              </div>
-                              <p className="text-sm leading-relaxed">
-                                {item.message}
-                              </p>
+                            <div className="h-2 bg-muted rounded-full overflow-hidden">
+                              <div
+                                // 'bg-primary' is a valid theme variable
+                                className="h-full bg-primary rounded-full transition-all"
+                                style={{
+                                  width: `${(item.score / item.max) * 100}%`,
+                                }}
+                              />
                             </div>
                           </div>
                         ))}
                       </div>
-                    </ScrollArea>
-                  </TabsContent>
+                    </div>
+                  </CardContent>
+                </Card>
 
-                  <TabsContent value="factcheck" className="mt-4">
-                    <ScrollArea className="h-[600px] pr-4">
-                      <div className="space-y-4">
-                        {factCheckData.map((fact, idx) => (
-                          <Card key={idx}>
-                            <CardContent className="pt-6">
-                              <div className="space-y-3">
-                                <div className="flex items-start justify-between gap-4">
-                                  <p className="text-sm font-medium flex-1">
-                                    {fact.claim}
-                                  </p>
-                                  <Badge
-                                    variant={
-                                      fact.status === "verified"
-                                        ? "default"
-                                        : "secondary"
-                                    }
-                                    className={
-                                      fact.status === "verified"
-                                        ? "bg-green-500 hover:bg-green-600"
-                                        : "bg-yellow-500 hover:bg-yellow-600"
-                                    }
-                                  >
-                                    {fact.status === "verified"
-                                      ? "✓ Verified"
-                                      : "⏳ Pending"}
-                                  </Badge>
+                {/* Overall Score */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">
+                      Overall Suitability Score
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center space-y-3">
+                      <div className="relative inline-flex items-center justify-center">
+                        <svg className="w-32 h-32 transform -rotate-90">
+                          <circle
+                            cx="64"
+                            cy="64"
+                            r="56"
+                            stroke="currentColor"
+                            strokeWidth="8"
+                            fill="none"
+                            className="text-muted" // 'text-muted' is valid
+                          />
+                          <circle
+                            cx="64"
+                            cy="64"
+                            r="56"
+                            stroke="currentColor"
+                            strokeWidth="8"
+                            fill="none"
+                            strokeDasharray={`${2 * Math.PI * 56}`}
+                            strokeDashoffset={`${2 * Math.PI * 56 * (1 - 0.85)}`}
+                            className="text-primary" // 'text-primary' is valid
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-4xl font-bold">85%</span>
+                        </div>
+                      </div>
+                      {/* --- UPDATED: Replaced green with theme primary --- */}
+                      <Badge className="bg-primary/10 text-primary border-0">
+                        Strong Match
+                      </Badge>
+                      <p className="text-xs text-muted-foreground">
+                        Jane demonstrates excellent product management skills and
+                        leadership qualities.
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Decision Actions */}
+                <Card>
+                  <CardContent className="pt-6 space-y-3">
+                    {/* --- UPDATED: Replaced green with default primary --- */}
+                    <Button className="w-full">
+                      <ThumbsUp className="h-4 w-4 mr-2" />
+                      Move to Next Stage
+                    </Button>
+                    <Button variant="destructive" className="w-full">
+                      <ThumbsDown className="h-4 w-4 mr-2" />
+                      Reject Candidate
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Right Column - Transcript & Details */}
+              <div className="lg:col-span-2">
+                <Card className="h-full">
+                  <CardHeader>
+                    <Tabs
+                      value={activeTab}
+                      onValueChange={setActiveTab}
+                      className="w-full"
+                    >
+                      <TabsList className="grid w-full grid-cols-3">
+                        <TabsTrigger value="transcript">
+                          Full Transcript
+                        </TabsTrigger>
+                        <TabsTrigger value="factcheck">Fact-Check</TabsTrigger>
+                        <TabsTrigger value="feedback">
+                          Structured Feedback
+                        </TabsTrigger>
+                      </TabsList>
+
+                      <TabsContent value="transcript" className="mt-4">
+                        <div className="mb-4">
+                          <div className="relative">
+                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                            <Input
+                              placeholder="Search in transcript..."
+                              className="pl-9"
+                            />
+                          </div>
+                        </div>
+                        <ScrollArea className="h-[600px] pr-4">
+                          <div className="space-y-6">
+                            {transcriptData.map((item) => (
+                              <div key={item.id} className="flex gap-3">
+                                <div
+                                  // --- UPDATED: Replaced slate/teal with theme colors ---
+                                  className={`w-10 h-10 rounded-full shrink-0 flex items-center justify-center text-sm font-semibold ${
+                                    item.type === "interviewer"
+                                      ? "bg-secondary text-secondary-foreground"
+                                      : "bg-primary text-primary-foreground"
+                                  }`}
+                                >
+                                  {item.type === "interviewer" ? "INT" : "JD"}
                                 </div>
-                                <p className="text-xs text-muted-foreground">
-                                  <span className="font-semibold">Source:</span>{" "}
-                                  {fact.source}
-                                </p>
+                                <div className="flex-1">
+                                  <div className="flex items-baseline gap-2 mb-1">
+                                    <p className="font-semibold text-sm">
+                                      {item.speaker}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                      {item.time}
+                                    </p>
+                                  </div>
+                                  <p className="text-sm leading-relaxed">
+                                    {item.message}
+                                  </p>
+                                </div>
                               </div>
-                            </CardContent>
-                          </Card>
-                        ))}
-                      </div>
-                    </ScrollArea>
-                  </TabsContent>
+                            ))}
+                          </div>
+                        </ScrollArea>
+                      </TabsContent>
 
-                  <TabsContent value="feedback" className="mt-4">
-                    <ScrollArea className="h-[600px] pr-4">
-                      <div className="space-y-6">
-                        <Card>
-                          <CardHeader>
-                            <CardTitle className="text-base">
-                              Technical Competency
-                            </CardTitle>
-                          </CardHeader>
-                          <CardContent className="space-y-3">
-                            <div>
-                              <p className="text-sm font-medium mb-2">
-                                Strengths:
-                              </p>
-                              <ul className="space-y-1 text-sm text-muted-foreground">
-                                <li>
-                                  • Deep understanding of product lifecycle
-                                  management
-                                </li>
-                                <li>
-                                  • Experience with data-driven decision making
-                                </li>
-                                <li>
-                                  • Strong grasp of user engagement metrics
-                                </li>
-                              </ul>
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium mb-2">
-                                Areas for Improvement:
-                              </p>
-                              <ul className="space-y-1 text-sm text-muted-foreground">
-                                <li>
-                                  • Limited backend architecture knowledge
-                                </li>
-                                <li>
-                                  • Could benefit from more technical depth in
-                                  system design
-                                </li>
-                              </ul>
-                            </div>
-                          </CardContent>
-                        </Card>
+                      <TabsContent value="factcheck" className="mt-4">
+                        <ScrollArea className="h-[600px] pr-4">
+                          <div className="space-y-4">
+                            {factCheckData.map((fact, idx) => (
+                              <Card key={idx}>
+                                <CardContent className="pt-6">
+                                  <div className="space-y-3">
+                                    <div className="flex items-start justify-between gap-4">
+                                      <p className="text-sm font-medium flex-1">
+                                        {fact.claim}
+                                      </p>
+                                      {/* --- UPDATED: Replaced green/yellow with theme colors --- */}
+                                      <Badge
+                                        variant={
+                                          fact.status === "verified"
+                                            ? "default"
+                                            : "secondary"
+                                        }
+                                        className={
+                                          fact.status === "verified"
+                                            ? "bg-primary/10 text-primary border-0"
+                                            : "bg-accent text-accent-foreground border-0"
+                                        }
+                                      >
+                                        {fact.status === "verified"
+                                          ? "✓ Verified"
+                                          : "⏳ Pending"}
+                                      </Badge>
+                                    </div>
+                                    <p className="text-xs text-muted-foreground">
+                                      <span className="font-semibold">Source:</span>{" "}
+                                      {fact.source}
+                                    </p>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                        </ScrollArea>
+                      </TabsContent>
 
-                        <Card>
-                          <CardHeader>
-                            <CardTitle className="text-base">
-                              Leadership & Communication
-                            </CardTitle>
-                          </CardHeader>
-                          <CardContent className="space-y-3">
-                            <div>
-                              <p className="text-sm font-medium mb-2">
-                                Strengths:
-                              </p>
-                              <ul className="space-y-1 text-sm text-muted-foreground">
-                                <li>
-                                  • Excellent communication and presentation
-                                  skills
-                                </li>
-                                <li>
-                                  • Demonstrated experience leading
-                                  cross-functional teams
-                                </li>
-                                <li>
-                                  • Strong stakeholder management capabilities
-                                </li>
-                              </ul>
-                            </div>
-                          </CardContent>
-                        </Card>
+                      <TabsContent value="feedback" className="mt-4">
+                        <ScrollArea className="h-[600px] pr-4">
+                          <div className="space-y-6">
+                            <Card>
+                              <CardHeader>
+                                <CardTitle className="text-base">
+                                  Technical Competency
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent className="space-y-3">
+                                <div>
+                                  <p className="text-sm font-medium mb-2">
+                                    Strengths:
+                                  </p>
+                                  <ul className="space-y-1 text-sm text-muted-foreground">
+                                    <li>
+                                      • Deep understanding of product lifecycle
+                                      management
+                                    </li>
+                                    <li>
+                                      • Experience with data-driven decision making
+                                    </li>
+                                    <li>
+                                      • Strong grasp of user engagement metrics
+                                    </li>
+                                  </ul>
+                                </div>
+                                <div>
+                                  <p className="text-sm font-medium mb-2">
+                                    Areas for Improvement:
+                                  </p>
+                                  <ul className="space-y-1 text-sm text-muted-foreground">
+                                    <li>
+                                      • Limited backend architecture knowledge
+                                    </li>
+                                    <li>
+                                      • Could benefit from more technical depth in
+                                      system design
+                                    </li>
+                                  </ul>
+                                </div>
+                              </CardContent>
+                            </Card>
 
-                        <Card>
-                          <CardHeader>
-                            <CardTitle className="text-base">
-                              Cultural Fit
-                            </CardTitle>
-                          </CardHeader>
-                          <CardContent>
-                            <p className="text-sm text-muted-foreground">
-                              Jane's collaborative approach and focus on
-                              user-centric product development aligns well with
-                              our company values. Her experience in fast-paced
-                              environments suggests she would thrive in our
-                              startup culture.
-                            </p>
-                          </CardContent>
-                        </Card>
-                      </div>
-                    </ScrollArea>
-                  </TabsContent>
-                </Tabs>
-              </CardHeader>
-            </Card>
+                            <Card>
+                              <CardHeader>
+                                <CardTitle className="text-base">
+                                  Leadership & Communication
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent className="space-y-3">
+                                <div>
+                                  <p className="text-sm font-medium mb-2">
+                                    Strengths:
+                                  </p>
+                                  <ul className="space-y-1 text-sm text-muted-foreground">
+                                    <li>
+                                      • Excellent communication and presentation
+                                      skills
+                                    </li>
+                                    <li>
+                                      • Demonstrated experience leading
+                                      cross-functional teams
+                                    </li>
+                                    <li>
+                                      • Strong stakeholder management capabilities
+                                    </li>
+                                  </ul>
+                                </div>
+                              </CardContent>
+                            </Card>
+
+                            <Card>
+                              <CardHeader>
+                                <CardTitle className="text-base">
+                                  Cultural Fit
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-sm text-muted-foreground">
+                                  Jane's collaborative approach and focus on
+                                  user-centric product development aligns well with
+                                  our company values. Her experience in fast-paced
+                                  environments suggests she would thrive in our
+                                  startup culture.
+                                </p>
+                              </CardContent>
+                            </Card>
+                          </div>
+                        </ScrollArea>
+                      </TabsContent>
+                    </Tabs>
+                  </CardHeader>
+                </Card>
+              </div>
+            </div>
           </div>
-        </div>
-      </main>
-    </div>
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
