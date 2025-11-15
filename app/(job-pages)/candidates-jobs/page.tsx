@@ -1,21 +1,45 @@
-// app/candidates-jobs/page.tsx
-import { TopNavbar } from "@/components/candidates/top-navbar";
-import { CandidatesView } from "@/components/candidates/candidates-view"; // <-- Import the new view
+"use client"; // <-- Added 'use client' as CandidatesView likely has state
+
+// --- Imports for Dashboard Layout ---
+import { AppSidebar } from "@/components/app-sidebar";
+import { SiteHeader } from "@/components/site-header";
+import {
+  SidebarInset,
+  SidebarProvider,
+} from "@/components/ui/sidebar";
+// --- End Dashboard Imports ---
+
+// import { TopNavbar } from "@/components/candidates/top-navbar"; // <-- REMOVED
+import { CandidatesView } from "@/components/candidates/candidates-view";
 
 // --- Page Component ---
 
 export default function CandidatesPage() {
   return (
-    <div className="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark">
-      <TopNavbar />
-      <main className="flex-grow px-4 sm:px-6 lg:px-8 py-8">
-        <div className="max-w-screen-2xl mx-auto">
-          {/* This page now just renders the navbar 
-            and the reusable CandidatesView component.
-          */}
-          <CandidatesView />
+    // --- UPDATED: New Dashboard Layout ---
+    <SidebarProvider
+      style={
+        {
+          "--sidebar-width": "calc(var(--spacing) * 72)",
+          "--header-height": "calc(var(--spacing) * 12)",
+        } as React.CSSProperties
+      }
+    >
+      <AppSidebar variant="inset" />
+      <SidebarInset>
+        {/* --- ADDED: Reusable SiteHeader --- */}
+        <SiteHeader header="Candidates" />
+
+        {/* --- ADDED: Main flex wrapper from reference --- */}
+        <div className="flex flex-1 flex-col">
+          {/* --- UPDATED: Main content with overflow and padding --- */}
+          <main className="flex-grow p-6 lg:p-8 overflow-y-auto">
+            <div className="max-w-screen-2xl mx-auto">
+              <CandidatesView />
+            </div>
+          </main>
         </div>
-      </main>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
