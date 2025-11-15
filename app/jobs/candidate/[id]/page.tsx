@@ -1,5 +1,5 @@
 // app/jobs/candidate/[id]/page.tsx
-"use client"; // For layout components and future state
+// Server Component (default). Avoid 'use client' so async is allowed.
 
 import { TopNavbar } from "@/components/candidates/top-navbar"; // Kept for reference, but replaced
 import { FeedbackPanel } from "@/components/candidate-profile/feedback-panel";
@@ -10,25 +10,16 @@ import { CandidateProfile, CandidateStub } from "@/types/candidate-profile";
 
 // --- Imports from your other dashboard files ---
 import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar";
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card"; // <-- Added Card imports
-import {
-  Menu,
-  Bell,
-  Settings,
-  Search,
-} from "lucide-react";
-
+import { Card, CardContent } from "@/components/ui/card"; // <-- Added Card imports
+import { Menu, Bell, Settings, Search } from "lucide-react";
 
 // --- MOCK DATA ---
 // (Unchanged)
@@ -74,7 +65,7 @@ const allCandidatesStub: CandidateStub[] = [
 const candidateProfileData: Record<string, CandidateProfile> = {
   "c-1": {
     id: "c-1",
-    name: "John Doe",
+    name: "John Does",
     title: "Senior Product Manager at TechCorp",
     avatarUrl:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuBbEgj_SOrbgOSWAXfICDHbHMmCiT2bIYf0el_KQVPeVkvnl6MSSuaNRGa_bPnZ4M4EojuVS2XjCSvaPGBdWa6xRHTs9uWtI6qtbyvS90FJdlGFlQYKVzCSXIGwDo0rTogmbxhfv7QieicHb9eV5nlpZF7lJKWt6DDlvl8BEc794yEY-qvW_XxqH8II8ipMgimO4MmEC49Z_CdDcKJz4BK4QbLvg7rbNUInTKI1pBhI2s9adhh8PDsC330vE2bWUYA1bndm6GwAvpAa",
@@ -129,7 +120,142 @@ const candidateProfileData: Record<string, CandidateProfile> = {
       { id: "sc-3", label: "Experience", score: 4, maxScore: 5 },
     ],
   },
-  // You would have entries for c-2, c-3, c-4 here
+  "c-2": {
+    id: "c-2",
+    name: "Jane Smith",
+    title: "Product Manager at Innovate Labs",
+    avatarUrl: "https://placehold.co/160x160/E2E8F0/4A5568?text=JS",
+    avatarFallback: "JS",
+    matchScore: 88,
+    aiSummary:
+      "Jane is an experienced PM with strong delivery across platform roadmaps, stakeholder alignment, and discovery. Her background spans B2B and internal tooling, aligning with the current Product Manager opening.",
+    linkedInUrl: "#",
+    portfolioUrl: "#",
+    factChecks: [
+      {
+        id: "fc-1",
+        summary: "Title variation across sources",
+        details:
+          "Some profiles list 'Senior PM'. Recommend confirming with candidate.",
+      },
+    ],
+    skills: [
+      { id: "s-1", label: "Roadmap Planning", isMatched: true },
+      { id: "s-2", label: "Stakeholder Management", isMatched: true },
+      { id: "s-3", label: "Agile", isMatched: true },
+      { id: "s-4", label: "SQL", isMatched: false },
+      { id: "s-5", label: "User Research", isMatched: true },
+    ],
+    experience: [
+      {
+        id: "e-1",
+        title: "Product Manager",
+        company: "Innovate Labs",
+        dates: "Feb 2021 - Present",
+        isCurrent: true,
+      },
+      {
+        id: "e-2",
+        title: "Associate Product Manager",
+        company: "Brightware",
+        dates: "Aug 2018 - Jan 2021",
+        isCurrent: false,
+      },
+    ],
+    scorecard: [
+      { id: "sc-1", label: "Product Sense", score: 5, maxScore: 5 },
+      { id: "sc-2", label: "Communication", score: 4, maxScore: 5 },
+      { id: "sc-3", label: "Execution", score: 4, maxScore: 5 },
+    ],
+  },
+  "c-3": {
+    id: "c-3",
+    name: "Peter Jones",
+    title: "UX Designer at PixelWorks",
+    avatarUrl: "https://placehold.co/160x160/E2E8F0/4A5568?text=PJ",
+    avatarFallback: "PJ",
+    matchScore: 85,
+    aiSummary:
+      "Peter brings a strong portfolio across enterprise UX, with strengths in prototyping and information architecture. A solid match for the UX Designer role.",
+    linkedInUrl: "#",
+    portfolioUrl: "#",
+    factChecks: [],
+    skills: [
+      { id: "s-1", label: "Figma", isMatched: true },
+      { id: "s-2", label: "Wireframing", isMatched: true },
+      { id: "s-3", label: "Prototyping", isMatched: true },
+      { id: "s-4", label: "User Research", isMatched: false },
+      { id: "s-5", label: "Design Systems", isMatched: true },
+    ],
+    experience: [
+      {
+        id: "e-1",
+        title: "UX Designer",
+        company: "PixelWorks",
+        dates: "Mar 2020 - Present",
+        isCurrent: true,
+      },
+      {
+        id: "e-2",
+        title: "Junior UX Designer",
+        company: "Craft Studio",
+        dates: "Jul 2017 - Feb 2020",
+        isCurrent: false,
+      },
+    ],
+    scorecard: [
+      { id: "sc-1", label: "Visual Design", score: 4, maxScore: 5 },
+      { id: "sc-2", label: "Interaction Design", score: 4, maxScore: 5 },
+      { id: "sc-3", label: "Research", score: 3, maxScore: 5 },
+    ],
+  },
+  "c-4": {
+    id: "c-4",
+    name: "Emily White",
+    title: "Backend Engineer at Nimbus",
+    avatarUrl: "https://placehold.co/160x160/E2E8F0/4A5568?text=EW",
+    avatarFallback: "EW",
+    matchScore: 81,
+    aiSummary:
+      "Emily specializes in distributed systems and API design, with hands-on experience in Node.js and Go. Good alignment with Backend Engineer requirements.",
+    linkedInUrl: "#",
+    portfolioUrl: "#",
+    factChecks: [
+      {
+        id: "fc-1",
+        summary: "Gap between roles",
+        details: "Two-month sabbatical in 2021; candidate notes relocation.",
+      },
+    ],
+    skills: [
+      { id: "s-1", label: "Node.js", isMatched: true },
+      { id: "s-2", label: "Go", isMatched: false },
+      { id: "s-3", label: "PostgreSQL", isMatched: true },
+      { id: "s-4", label: "Kubernetes", isMatched: false },
+      { id: "s-5", label: "API Design", isMatched: true },
+    ],
+    experience: [
+      {
+        id: "e-1",
+        title: "Backend Engineer",
+        company: "Nimbus",
+        dates: "May 2022 - Present",
+        isCurrent: true,
+      },
+      {
+        id: "e-2",
+        title: "Software Engineer",
+        company: "Datavault",
+        dates: "Jan 2019 - Apr 2022",
+        isCurrent: false,
+      },
+    ],
+    scorecard: [
+      { id: "sc-1", label: "System Design", score: 4, maxScore: 5 },
+      { id: "sc-2", label: "Coding", score: 4, maxScore: 5 },
+      { id: "sc-3", label: "Ownership", score: 4, maxScore: 5 },
+    ],
+  },
 };
 
 // Mock function to get data
@@ -145,12 +271,10 @@ function DashboardHeader() {
   return (
     <header className="sticky top-0 z-10 flex h-20 items-center justify-between border-b bg-background px-8">
       <div className="flex items-center gap-4">
-        {/* Mobile Sidebar Toggle (from your original structure) */}
-        <Button variant="outline" size="icon" className="md:hidden">
-          <Menu className="h-5 w-5" />
-          <span className="sr-only">Toggle Menu</span>
-        </Button>
-        
+        {/* Sidebar Toggle */}
+        <SidebarTrigger className="md:hidden" />
+        <SidebarTrigger className="hidden md:inline-flex" />
+
         {/* Welcome Message */}
         <div className="flex min-w-72 flex-col">
           <h1 className="text-2xl font-bold">Candidate Profile</h1>
@@ -177,7 +301,10 @@ function DashboardHeader() {
           <Settings className="h-4 w-4" />
         </Button>
         <Avatar className="h-10 w-10">
-          <AvatarImage src="https://placehold.co/100x100/E2E8F0/4A5568?text=JL" alt="Jessica Lane" />
+          <AvatarImage
+            src="https://placehold.co/100x100/E2E8F0/4A5568?text=JL"
+            alt="Jessica Lane"
+          />
           <AvatarFallback>JL</AvatarFallback>
         </Avatar>
       </div>
@@ -185,17 +312,16 @@ function DashboardHeader() {
   );
 }
 
-
 // --- PAGE COMPONENT ---
 
 type CandidateProfilePageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export default async function CandidateProfilePage({
   params,
 }: CandidateProfilePageProps) {
-  const { id } = params;
+  const { id } = await params;
   const { profile, candidatesList } = await getCandidateData(id);
 
   return (
@@ -215,18 +341,18 @@ export default async function CandidateProfilePage({
         <main className="grid flex-1 grid-cols-1 lg:grid-cols-5 gap-8 p-8">
           {/* Central Content */}
           <section className="lg:col-span-3 overflow-y-auto">
-              <CardContent className="space-y-8 p-6 ">
-                <ProfileHeader profile={profile} />
-                <ProfileSummary profile={profile} />
-              </CardContent>
+            <CardContent className="space-y-8 p-6 ">
+              <ProfileHeader profile={profile} />
+              <ProfileSummary profile={profile} />
+            </CardContent>
           </section>
 
           {/* Right Sidebar (stacked) */}
           <aside className="lg:col-span-2 flex flex-col gap-8">
-              <ProfileSidebar
-                candidates={candidatesList}
-                activeCandidateId={id}
-              />
+            <ProfileSidebar
+              candidates={candidatesList}
+              activeCandidateId={id}
+            />
             <FeedbackPanel initialScorecard={profile.scorecard} />
           </aside>
         </main>
