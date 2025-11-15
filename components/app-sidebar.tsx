@@ -84,11 +84,11 @@ const data = {
       url: "/jobs", // Corrected path
       icon: IconReport,
     },
-    {
-      name: "Active Jobs",
-      url: "/job-p", // Corrected path
-      icon: IconFileWord,
-    },
+    // {
+    //   name: "Active Jobs",
+    //   url: "/job-p", // Corrected path
+    //   icon: IconFileWord,
+    // },
     {
       name: "candidate",
       url: "/candidates-jobs", // Corrected path
