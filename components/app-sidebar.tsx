@@ -78,6 +78,24 @@ const data = {
       icon: IconSearch,
     },
   ],
+  jobPages:[
+    {
+      name: "Jobs",
+      url: "/jobs", // Corrected path
+      icon: IconReport,
+    },
+    {
+      name: "Active Jobs",
+      url: "/job-p", // Corrected path
+      icon: IconFileWord,
+    },
+    {
+      name: "candidate",
+      url: "/candidates-jobs", // Corrected path
+      icon: IconDatabase,
+    } 
+  ],
+
   commonPages: [
     {
       name: "Campaign Manager",
@@ -150,6 +168,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         {/* These components will now receive the corrected URLs */}
         <NavMain items={data.navMain} />
+        <NavDocuments params="Job Pages" items={data.jobPages} />
         <NavDocuments params="Common Pages" items={data.commonPages} />
         <NavDocuments params="Interview Details" items={data.interview} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
