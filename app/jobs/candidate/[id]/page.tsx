@@ -1,14 +1,37 @@
 // app/jobs/candidate/[id]/page.tsx
-import { TopNavbar } from "@/components/candidates/top-navbar";
+"use client"; // For layout components and future state
+
+import { TopNavbar } from "@/components/candidates/top-navbar"; // Kept for reference, but replaced
 import { FeedbackPanel } from "@/components/candidate-profile/feedback-panel";
 import { ProfileHeader } from "@/components/candidate-profile/profile-header";
 import { ProfileSidebar } from "@/components/candidate-profile/profile-sidebar";
 import { ProfileSummary } from "@/components/candidate-profile/profile-summary";
 import { CandidateProfile, CandidateStub } from "@/types/candidate-profile";
 
-// --- MOCK DATA ---
-// In a real app, you'd fetch this from your database/API
+// --- Imports from your other dashboard files ---
+import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+} from "@/components/ui/card"; // <-- Added Card imports
+import {
+  Menu,
+  Bell,
+  Settings,
+  Search,
+} from "lucide-react";
 
+
+// --- MOCK DATA ---
+// (Unchanged)
 const allCandidatesStub: CandidateStub[] = [
   {
     id: "c-1",
@@ -117,6 +140,52 @@ async function getCandidateData(id: string) {
   return { profile, candidatesList };
 }
 
+// --- New Component: DashboardHeader (from app/page.tsx) ---
+function DashboardHeader() {
+  return (
+    <header className="sticky top-0 z-10 flex h-20 items-center justify-between border-b bg-background px-8">
+      <div className="flex items-center gap-4">
+        {/* Mobile Sidebar Toggle (from your original structure) */}
+        <Button variant="outline" size="icon" className="md:hidden">
+          <Menu className="h-5 w-5" />
+          <span className="sr-only">Toggle Menu</span>
+        </Button>
+        
+        {/* Welcome Message */}
+        <div className="flex min-w-72 flex-col">
+          <h1 className="text-2xl font-bold">Candidate Profile</h1>
+          <p className="text-sm text-muted-foreground">
+            Review and score candidates.
+          </p>
+        </div>
+      </div>
+
+      {/* Search & Actions (from our previous design) */}
+      <div className="flex flex-1 items-center justify-end gap-4">
+        <div className="relative w-full max-w-sm">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search for jobs, candidates..."
+            className="w-full pl-10"
+          />
+        </div>
+        <Button variant="outline" size="icon">
+          <Bell className="h-4 w-4" />
+        </Button>
+        <Button variant="outline" size="icon">
+          <Settings className="h-4 w-4" />
+        </Button>
+        <Avatar className="h-10 w-10">
+          <AvatarImage src="https://placehold.co/100x100/E2E8F0/4A5568?text=JL" alt="Jessica Lane" />
+          <AvatarFallback>JL</AvatarFallback>
+        </Avatar>
+      </div>
+    </header>
+  );
+}
+
+
 // --- PAGE COMPONENT ---
 
 type CandidateProfilePageProps = {
@@ -130,22 +199,38 @@ export default async function CandidateProfilePage({
   const { profile, candidatesList } = await getCandidateData(id);
 
   return (
-    <div className="flex flex-col h-screen w-full bg-background-light dark:bg-background-dark">
-      {/* We reuse the TopNavbar from the candidates-jobs page */}
-      <TopNavbar />
+    <SidebarProvider
+      style={
+        {
+          "--sidebar-width": "calc(var(--spacing) * 72)",
+          "--header-height": "calc(var(--spacing) * 12)",
+        } as React.CSSProperties
+      }
+    >
+      <AppSidebar variant="inset" />
 
-      <main className="flex flex-1 overflow-hidden">
-        <ProfileSidebar candidates={candidatesList} activeCandidateId={id} />
+      <SidebarInset>
+        <DashboardHeader />
 
-        <section className="flex-1 overflow-y-auto p-8">
-          <div className="max-w-4xl mx-auto space-y-6">
-            <ProfileHeader profile={profile} />
-            <ProfileSummary profile={profile} />
-          </div>
-        </section>
+        <main className="grid flex-1 grid-cols-1 lg:grid-cols-5 gap-8 p-8">
+          {/* Central Content */}
+          <section className="lg:col-span-3 overflow-y-auto">
+              <CardContent className="space-y-8 p-6 ">
+                <ProfileHeader profile={profile} />
+                <ProfileSummary profile={profile} />
+              </CardContent>
+          </section>
 
-        <FeedbackPanel initialScorecard={profile.scorecard} />
-      </main>
-    </div>
+          {/* Right Sidebar (stacked) */}
+          <aside className="lg:col-span-2 flex flex-col gap-8">
+              <ProfileSidebar
+                candidates={candidatesList}
+                activeCandidateId={id}
+              />
+            <FeedbackPanel initialScorecard={profile.scorecard} />
+          </aside>
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

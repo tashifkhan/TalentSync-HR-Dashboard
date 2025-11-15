@@ -1,4 +1,3 @@
-// components/candidate-profile/feedback-panel.tsx
 "use client";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -22,26 +21,31 @@ export function FeedbackPanel({ initialScorecard }: FeedbackPanelProps) {
   };
 
   return (
-    <aside className="flex flex-col w-full max-w-sm border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/70 overflow-y-auto">
-      <div className="p-4 border-b border-slate-200 dark:border-slate-800">
-        <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+    <aside className="flex flex-col w-full max-w-sm border-l bg-background overflow-y-auto">
+      {/* --- Updated: Removed hardcoded border/bg colors --- */}
+      <div className="p-4 border-b">
+        {/* --- Updated: Use `text-foreground` (default) --- */}
+        <h2 className="text-base font-semibold text-foreground">
           Feedback & Actions
         </h2>
       </div>
       <div className="flex-1 p-4 space-y-6">
         {/* Scorecard */}
         <div className="space-y-4">
-          <h3 className="text-sm font-medium text-slate-600 dark:text-slate-300">
+          {/* --- Updated: Use `text-muted-foreground` for subheadings --- */}
+          <h3 className="text-sm font-medium text-muted-foreground">
             SCORECARD
           </h3>
           <div className="space-y-4">
             {scorecard.map((item) => (
               <div key={item.id}>
-                <Label className="text-sm font-medium text-slate-800 dark:text-slate-200">
+                {/* --- Updated: Use `text-foreground` (default) --- */}
+                <Label className="text-sm font-medium text-foreground">
                   {item.label}
                 </Label>
                 <div className="flex items-center justify-between mt-1">
-                  <div className="flex gap-1 text-slate-300 dark:text-slate-600">
+                  {/* --- Updated: Use `text-muted-foreground` for empty stars --- */}
+                  <div className="flex gap-1 text-muted-foreground">
                     {[...Array(item.maxScore)].map((_, i) => (
                       <Star
                         key={i}
@@ -49,13 +53,14 @@ export function FeedbackPanel({ initialScorecard }: FeedbackPanelProps) {
                           "cursor-pointer",
                           i < item.score
                             ? "text-primary fill-primary"
-                            : "fill-transparent"
+                            : "fill-transparent" // Empty star stroke inherits from parent
                         )}
                         onClick={() => handleScoreChange(item.id, i + 1)}
                       />
                     ))}
                   </div>
-                  <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                  {/* --- Updated: Use `text-foreground` (default) --- */}
+                  <span className="text-sm font-semibold text-foreground">
                     {item.score}/{item.maxScore}
                   </span>
                 </div>
@@ -66,8 +71,9 @@ export function FeedbackPanel({ initialScorecard }: FeedbackPanelProps) {
 
         {/* Feedback Text Area */}
         <div>
+          {/* --- Updated: Use `text-muted-foreground` for subheadings --- */}
           <Label
-            className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-2"
+            className="block text-sm font-medium text-muted-foreground mb-2"
             htmlFor="feedback"
           >
             FEEDBACK
@@ -81,7 +87,8 @@ export function FeedbackPanel({ initialScorecard }: FeedbackPanelProps) {
       </div>
 
       {/* Action Buttons */}
-      <div className="p-4 mt-auto border-t border-slate-200 dark:border-slate-800 space-y-3">
+      {/* --- Updated: Removed hardcoded border color --- */}
+      <div className="p-4 mt-auto border-t space-y-3">
         <Button className="w-full h-10 gap-2">
           <Send className="h-5 w-5" />
           <span className="truncate">Move to Next Stage</span>
@@ -91,9 +98,10 @@ export function FeedbackPanel({ initialScorecard }: FeedbackPanelProps) {
             <Pause className="h-5 w-5" />
             <span className="truncate">Put on Hold</span>
           </Button>
+          {/* --- Updated: Simplified to outline variant + destructive text --- */}
           <Button
-            variant="secondary"
-            className="w-full h-10 gap-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400"
+            variant="outline"
+            className="w-full h-10 gap-2 text-destructive hover:text-destructive"
           >
             <ThumbsDown className="h-5 w-5" />
             <span className="truncate">Reject</span>

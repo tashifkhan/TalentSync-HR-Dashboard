@@ -1,4 +1,3 @@
-// components/candidate-profile/profile-sidebar.tsx
 "use client";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
@@ -18,23 +17,29 @@ export function ProfileSidebar({
   activeCandidateId,
 }: ProfileSidebarProps) {
   return (
-    <aside className="flex flex-col w-full max-w-xs border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark/50 overflow-y-auto">
-      <div className="p-4 border-b border-slate-200 dark:border-slate-800">
+    // --- Updated: Use theme-aware bg-background and border-r ---
+    <aside className="flex flex-col w-full max-w-xs border-r bg-background overflow-y-auto">
+      {/* --- Updated: Use theme-aware border-b --- */}
+      <div className="p-4 border-b">
         <div className="flex flex-col">
-          <h1 className="text-slate-900 dark:text-white text-base font-semibold leading-normal">
+          {/* --- Updated: Use text-foreground --- */}
+          <h1 className="text-foreground text-base font-semibold leading-normal">
             Candidates
           </h1>
-          <p className="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">
+          {/* --- Updated: Use text-muted-foreground --- */}
+          <p className="text-muted-foreground text-sm font-normal leading-normal">
             Senior Product Manager
           </p>
         </div>
       </div>
       <div className="p-4">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500 dark:text-slate-400" />
+          {/* --- Updated: Use text-muted-foreground --- */}
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
           <Input
             placeholder="Find candidates..."
-            className="pl-10 bg-background-light dark:bg-slate-800"
+            // --- Updated: Removed custom bg-* classes ---
+            className="pl-10"
           />
         </div>
       </div>
@@ -44,9 +49,11 @@ export function ProfileSidebar({
             key={candidate.id}
             href={`/jobs/candidate/${candidate.id}`}
             className={cn(
-              "flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800",
+              "flex items-center gap-3 px-3 py-2 rounded-lg",
+              // --- Updated: Use theme-aware accent for hover/active ---
+              "hover:bg-accent hover:text-accent-foreground",
               candidate.id === activeCandidateId &&
-                "bg-primary/10 dark:bg-primary/20"
+                "bg-accent text-accent-foreground"
             )}
           >
             <Avatar className="h-10 w-10">
@@ -55,16 +62,16 @@ export function ProfileSidebar({
             </Avatar>
             <div className="flex-1">
               <p
+                // --- Updated: Simplified to text-foreground ---
+                // (Parent Link's "text-accent-foreground" will override on hover/active)
                 className={cn(
-                  "text-sm font-medium leading-normal",
-                  candidate.id === activeCandidateId
-                    ? "text-slate-900 dark:text-white"
-                    : "text-slate-800 dark:text-slate-200"
+                  "text-sm font-medium leading-normal text-foreground"
                 )}
               >
                 {candidate.name}
               </p>
-              <p className="text-slate-500 dark:text-slate-400 text-xs">
+              {/* --- Updated: Use text-muted-foreground --- */}
+              <p className="text-muted-foreground text-xs">
                 {candidate.stage}
               </p>
             </div>
@@ -73,8 +80,8 @@ export function ProfileSidebar({
               className={cn(
                 "text-sm font-semibold",
                 candidate.matchScore > 90
-                  ? "text-success border-success"
-                  : "text-slate-600 dark:text-slate-400"
+                  ? "text-success border-success" // Semantic color (good)
+                  : "text-muted-foreground" // --- Updated ---
               )}
             >
               {candidate.matchScore}%
