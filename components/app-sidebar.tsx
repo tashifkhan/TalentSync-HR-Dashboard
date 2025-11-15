@@ -113,12 +113,12 @@ const data = {
     },
     {
       name: "Interview Monitoring",
-      url: "/live-interview-monitoring", // Corrected path
+      url: "/live-interview-monitering", // Corrected path
       icon: IconFileWord,
     },
     {
       name: "Interview Schedule",
-      url: "/master-interview-schedule", // Corrected path
+      url: "/master-interview-schdule", // Corrected path
       icon: IconFolder,
     },
     {
