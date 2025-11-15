@@ -1,11 +1,21 @@
+// --- Imports for Dashboard Layout ---
+import { AppSidebar } from "@/components/app-sidebar";
+import { SiteHeader } from "@/components/site-header";
+import {
+  SidebarInset,
+  SidebarProvider,
+} from "@/components/ui/sidebar";
+// --- End Dashboard Imports ---
+
 import { ProfileHeader } from "@/components/profile/profile-header";
 import { SummaryCard } from "@/components/profile/summary-card";
 import { MainContentTabs } from "@/components/profile/main-content-tabs";
 import { EnrichedDataPanel } from "@/components/profile/enriched-data-panel";
 import { FullProfile } from "@/types/profile";
-import { Sidebar } from "@/components/jobs/sidebar";
+// import { Sidebar } from "@/components/jobs/sidebar"; // <-- REMOVED
 
 // --- MOCK DATA ---
+
 const allProfiles: Record<string, FullProfile> = {
   "c-1": {
     id: "c-1",
@@ -385,6 +395,7 @@ const allProfiles: Record<string, FullProfile> = {
   },
 };
 
+
 async function getProfileData(id: string) {
   // Simulate API call
   return allProfiles[id] || allProfiles["c-1"]; // Fallback to c-1
@@ -401,18 +412,35 @@ export default async function CandidateProfilePage({
   const profile = await getProfileData(params.id);
 
   return (
-    <div className="flex min-h-screen bg-background-light dark:bg-background-dark">
-      <Sidebar />
-      <main className="flex-1 p-6 lg:p-8 overflow-y-auto">
-        <div className="max-w-7xl mx-auto">
-          <ProfileHeader name={profile.name} jobTitle={profile.jobTitle} />
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <SummaryCard data={profile.summary} />
-            <MainContentTabs overviewData={profile.overview} />
-            <EnrichedDataPanel data={profile.enrichedData} />
-          </div>
+    // --- UPDATED: New Dashboard Layout ---
+    <SidebarProvider
+      style={
+        {
+          "--sidebar-width": "calc(var(--spacing) * 72)",
+          "--header-height": "calc(var(--spacing) * 12)",
+        } as React.CSSProperties
+      }
+    >
+      <AppSidebar variant="inset" />
+      <SidebarInset>
+        {/* --- ADDED: Reusable SiteHeader --- */}
+        <SiteHeader header="Candidate Profile" />
+
+        {/* --- ADDED: Main flex wrapper from reference --- */}
+        <div className="flex flex-1 flex-col">
+          {/* --- UPDATED: Removed hardcoded bg colors --- */}
+          <main className="flex-1 p-6 lg:p-8 overflow-y-auto">
+            <div className="max-w-7xl mx-auto">
+              <ProfileHeader name={profile.name} jobTitle={profile.jobTitle} />
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <SummaryCard data={profile.summary} />
+                <MainContentTabs overviewData={profile.overview} />
+                <EnrichedDataPanel data={profile.enrichedData} />
+              </div>
+            </div>
+          </main>
         </div>
-      </main>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
