@@ -131,22 +131,71 @@ const data = {
       icon: IconSearch,
     },
   ],
-  documents: [
+  // documents: [
+  //   {
+  //     name: "Data Library",
+  //     url: "#",
+  //     icon: IconDatabase,
+  //   },
+  //   {
+  //     name: "Reports",
+  //     url: "#",
+  //     icon: IconReport,
+  //   },
+  //   {
+  //     name: "Word Assistant",
+  //     url: "#",
+  //     icon: IconFileWord,
+  //   },
+  // ],
+  commonPages: [
     {
-      name: "Data Library",
+      name: "Campaign Manager",
       url: "#",
       icon: IconDatabase,
     },
     {
-      name: "Reports",
+      name: "Communication Log",
       url: "#",
       icon: IconReport,
     },
     {
-      name: "Word Assistant",
+      name: "Compose Message",
       url: "#",
       icon: IconFileWord,
     },
+    {
+      name: "Template Library",
+      url: "#",
+      icon: IconFolder,
+    }
+  ],
+  interview: [
+    {
+      name: "Interview Scheduling",
+      url: "#",
+      icon: IconDatabase,
+    },
+    {
+      name: "interview-toolkit",
+      url: "#",
+      icon: IconReport,
+    },
+    {
+      name: "Interview Monitoring",
+      url: "#",
+      icon: IconFileWord,
+    },
+    {
+      name: "Interview Schedule",
+      url: "#",
+      icon: IconFolder,
+    },
+    {
+      name: "Interview review",
+      url: "#",
+      icon: IconFolder,
+    }
   ],
 }
 
@@ -170,7 +219,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
+        <NavDocuments params="Common Pages" items={data.commonPages} />
+        <NavDocuments params="Interview Details" items={data.interview} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

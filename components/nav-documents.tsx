@@ -26,20 +26,22 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 
-export function NavDocuments({
-  items,
-}: {
+export function NavDocuments({ items, params }: {
   items: {
     name: string
     url: string
     icon: Icon
   }[]
+  params: string
 }) {
+  if (!params) {
+    params = "Documents";
+  }
   const { isMobile } = useSidebar()
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Documents</SidebarGroupLabel>
+      <SidebarGroupLabel>{params}</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.name}>
