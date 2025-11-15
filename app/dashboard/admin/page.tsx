@@ -53,55 +53,10 @@ import {
   PlusCircle,
   Filter,
 } from "lucide-react";
+import { SiteHeader } from "@/components/site-header";
 
 // --- 1. Admin Sidebar Component (REMOVED) ---
 // function AdminSidebar() { ... }
-
-// --- 2. New Component: DashboardHeader (from app/executive-dashboard/page.tsx) ---
-function DashboardHeader() {
-  return (
-    <header className="sticky top-0 z-10 flex h-20 items-center justify-between border-b bg-background px-8">
-      <div className="flex items-center gap-4">
-        {/* Mobile Sidebar Toggle (from your original structure) */}
-        <Button variant="outline" size="icon" className="md:hidden">
-          <Menu className="h-5 w-5" />
-          <span className="sr-only">Toggle Menu</span>
-        </Button>
-        
-        {/* Welcome Message (Adapted for Admin Settings) */}
-        <div className="flex min-w-72 flex-col">
-          <h1 className="text-3xl font-bold">Admin Settings</h1>
-          <p className="text-sm text-muted-foreground">
-            Manage users, billing, integrations, and company-wide settings.
-          </p>
-        </div>
-      </div>
-
-      {/* Search & Actions (from our previous design) */}
-      <div className="flex flex-1 items-center justify-end gap-4">
-        <div className="relative w-full max-w-sm">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search for jobs, candidates..."
-            className="w-full pl-10"
-          />
-        </div>
-        <Button variant="outline" size="icon">
-          <Bell className="h-4 w-4" />
-        </Button>
-        <Button variant="outline" size="icon">
-          <Settings className="h-4 w-4" />
-        </Button>
-        <Avatar className="h-10 w-10">
-          <AvatarImage src="https://placehold.co/100x100/E2E8F0/4A5568?text=JL" alt="Jessica Lane" />
-          <AvatarFallback>JL</AvatarFallback>
-        </Avatar>
-      </div>
-    </header>
-  );
-}
-
 
 // --- 3. Hardcoded data for the user table (UNCHANGED) ---
 const userData = [
@@ -234,7 +189,8 @@ export default function Page() {
 
       <SidebarInset>
         {/* Use the new DashboardHeader */}
-        <DashboardHeader />
+        {/* <DashboardHeader /> */}
+                <SiteHeader header="Admin Dashboard"/>
 
         {/* Main Content */}
         <main className="flex-1 space-y-6 p-8">

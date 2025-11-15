@@ -67,57 +67,13 @@ import {
   Cell,
   Legend,
 } from "recharts";
+import { SiteHeader } from "@/components/site-header";
 
 // --- 1. Sidebar Component (REMOVED) ---
 // function ExecutiveSidebar() { ... } // <-- Replaced with AppSidebar import
 
 // --- 2. Header Component (REPLACED) ---
 // function ExecutiveHeader() { ... } // <-- Replaced with DashboardHeader
-
-// --- New Component: DashboardHeader (from app/page.tsx) ---
-function DashboardHeader() {
-  return (
-    <header className="sticky top-0 z-10 flex h-20 items-center justify-between border-b bg-background px-8">
-      <div className="flex items-center gap-4">
-        {/* Mobile Sidebar Toggle (from your original structure) */}
-        <Button variant="outline" size="icon" className="md:hidden">
-          <Menu className="h-5 w-5" />
-          <span className="sr-only">Toggle Menu</span>
-        </Button>
-        
-        {/* Welcome Message */}
-        <div className="flex min-w-72 flex-col">
-          <h1 className="text-2xl font-bold">Executive Dashboard</h1>
-          <p className="text-sm text-muted-foreground">
-            Strategic oversight and executive insights.
-          </p>
-        </div>
-      </div>
-
-      {/* Search & Actions (from our previous design) */}
-      <div className="flex flex-1 items-center justify-end gap-4">
-        <div className="relative w-full max-w-sm">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search for jobs, candidates..."
-            className="w-full pl-10"
-          />
-        </div>
-        <Button variant="outline" size="icon">
-          <Bell className="h-4 w-4" />
-        </Button>
-        <Button variant="outline" size="icon">
-          <Settings className="h-4 w-4" />
-        </Button>
-        <Avatar className="h-10 w-10">
-          <AvatarImage src="https://placehold.co/100x100/E2E8F0/4A5568?text=JL" alt="Jessica Lane" />
-          <AvatarFallback>JL</AvatarFallback>
-        </Avatar>
-      </div>
-    </header>
-  );
-}
 
 
 // --- 3. Stat Card Components (UNCHANGED) ---
@@ -397,7 +353,8 @@ export default function Page() {
 
       <SidebarInset>
         {/* Use the new DashboardHeader */}
-        <DashboardHeader /> 
+        {/* <DashboardHeader />  */}
+        <SiteHeader header="Hiring Manager Dashboard"/>
         
         {/* Main Content (p-8 added back for padding) */}
         <main className="flex-1 space-y-8 p-8">
